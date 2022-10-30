@@ -13,6 +13,12 @@ on:
     paths:
     - infra/**
 
+  push:
+    branches:
+      - 'main'
+      - 'releases/**'
+
+
 env:
   tf_actions_working_dir: infra
 
@@ -45,10 +51,10 @@ jobs:
     # - name: Setup TFLint
     #   uses: terraform-linters/setup-tflint@v1
 
-    - name: Terraform fmt
-      id: fmt
-      run: terraform fmt -check
-      continue-on-error: true
+    # - name: Terraform fmt
+    #   id: fmt
+    #   run: terraform fmt -check
+    #   continue-on-error: true
 
     - name: Terraform Init
       id: init
@@ -106,14 +112,13 @@ jobs:
           ${{ steps.validate.outputs.stdout }}
           \`\`\`
           </details>
+
           #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
 
           <details><summary>Show Plan</summary>
-
           \`\`\`\n
           ${process.env.PLAN}
           \`\`\`
-
           </details>
 
           *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
