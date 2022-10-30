@@ -105,16 +105,10 @@ jobs:
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
-          // 1. Prep the output
-          const output = `
-          <details><summary>Validation Output</summary>
-          \`\`\`\n
-          ${{ steps.validate.outputs.stdout }}
-          \`\`\`
-          </details>
-
+          const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+          #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+          #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
           #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
-
           <details><summary>Show Plan</summary>
           \`\`\`\n
           ${process.env.PLAN}
