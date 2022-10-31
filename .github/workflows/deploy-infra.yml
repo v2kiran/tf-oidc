@@ -29,6 +29,28 @@ on:
         required: true
         default: false
 
+      tf_plan_summary:
+        type: boolean
+        description: Terraform Plan summary
+        required: true
+        default: false
+      tf_step_summary:
+        type: boolean
+        description: Terraform step summary
+        required: true
+        default: false
+      tf_upload_plan:
+        type: boolean
+        description: Upload Terraform Plan
+        required: true
+        default: false
+      calculate_destroy:
+        type: boolean
+        description: Calculate destroy
+        required: true
+        default: false
+
+
   pull_request:
     paths:
     - infra/**
@@ -100,6 +122,7 @@ jobs:
     #   run: tflint -f compact
 
     - name: Calculate destroy arg
+      if: ${{ inputs.calculate_destroy }}
       id: destroy_arg
       run: |
         if [ $DESTROY == "true" ]; then
@@ -123,8 +146,8 @@ jobs:
 
     - name: Create the plan summary
       uses: actions/github-script@v6
-      needs: plan
-      if: always()
+      if: ${{ inputs.tf_plan_summary }}
+      #if: always()
       id: summary
       env:
         PLAN: '${{ steps.plan.outputs.stdout }}'
@@ -152,12 +175,12 @@ jobs:
           core.setOutput('summary', output);
 
     - name: Write the step summary
-      needs: plan
-      if: always()
+      if: ${{ inputs.tf_step_summary }}
+      #if: always()
       run: cat summary.md >> $GITHUB_STEP_SUMMARY
 
     - name: Upload the plan
-      needs: plan
+      if: ${{ inputs.tf_upload_plan }}
       uses: actions/upload-artifact@v3
       with:
         name: tf-plan
