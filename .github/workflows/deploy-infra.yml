@@ -18,6 +18,16 @@ on:
         description: Login to Azure
         required: true
         default: false
+      tf_plan:
+        type: boolean
+        description: Run Terraform Plan
+        required: true
+        default: false
+      tf_validate:
+        type: boolean
+        description: Run Terraform Validate
+        required: true
+        default: false
 
   pull_request:
     paths:
@@ -69,6 +79,7 @@ jobs:
     #   continue-on-error: true
 
     - name: Terraform Init
+      if: ${{ inputs.tf_init }}
       id: init
       run: terraform init
       env:
@@ -78,6 +89,7 @@ jobs:
         ARM_USE_OIDC: true
 
     - name: Terraform Validate
+      if: ${{ inputs.tf_validate }}
       id: validate
       run: terraform validate -no-color
 
@@ -99,6 +111,7 @@ jobs:
         DESTROY: ${{ github.event.inputs.destroy }}
 
     - name: Terraform Plan
+      if: ${{ inputs.tf_plan }}
       id: plan
       run: terraform plan $DESTROY -no-color --out=out.tfplan
       env:
@@ -110,6 +123,7 @@ jobs:
 
     - name: Create the plan summary
       uses: actions/github-script@v6
+      needs: plan
       if: always()
       id: summary
       env:
@@ -138,10 +152,12 @@ jobs:
           core.setOutput('summary', output);
 
     - name: Write the step summary
+      needs: plan
       if: always()
       run: cat summary.md >> $GITHUB_STEP_SUMMARY
 
     - name: Upload the plan
+      needs: plan
       uses: actions/upload-artifact@v3
       with:
         name: tf-plan
