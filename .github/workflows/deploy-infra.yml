@@ -8,6 +8,16 @@ on:
         description: Destroy environment?
         required: true
         default: false
+      setup_tf:
+        type: boolean
+        description: Setup Terraform
+        required: true
+        default: false
+      azlogin:
+        type: boolean
+        description: Setup Terraform
+        required: true
+        default: false
 
   pull_request:
     paths:
@@ -15,7 +25,7 @@ on:
 
   push:
     branches:
-      - 'main'
+      # - 'main'
       - 'releases/**'
 
 
@@ -39,6 +49,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Log in to Azure using OIDC
+      if: {{ inputs.azlogin }}
       uses: azure/login@v1
       with:
         client-id: ${{ secrets.AZURE_CLIENT_ID }}
@@ -46,6 +57,7 @@ jobs:
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
     - name: Setup Terraform
+      if: {{ inputs.setup_tf }}
       uses: hashicorp/setup-terraform@v1
 
     # - name: Setup TFLint
