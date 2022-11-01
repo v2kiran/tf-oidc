@@ -49,7 +49,11 @@ on:
         description: Calculate destroy
         required: true
         default: false
-
+      wfcommands:
+        type: boolean
+        description: Test Workflow commands
+        required: true
+        default: false
 
   pull_request:
     paths:
@@ -79,6 +83,16 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
+    - name: Disable workflow commands
+      if: ${{ inputs.wfcommands }}
+      run: |
+        Write-Output '::warning:: This is a warning message, to demonstrate that commands are being processed.'
+        $stopMarker = New-Guid
+        Write-Output "::stop-commands::$stopMarker"
+        Write-Output '::warning:: This will NOT be rendered as a warning, because stop-commands has been invoked.'
+        Write-Output "::$stopMarker::"
+        Write-Output '::warning:: This is a warning again, because stop-commands has been turned off.'
 
     - name: Log in to Azure using OIDC
       if: ${{ inputs.azlogin }}
