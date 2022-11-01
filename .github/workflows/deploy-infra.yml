@@ -88,6 +88,7 @@ jobs:
       if: ${{ inputs.wfcommands }}
       run: |
         Write-Output '::warning:: This is a warning message, to demonstrate that commands are being processed.'
+        write-warning "This is a warning message"
         Write-Output "::group::My title"
         Write-Output "Inside group"
         Write-Output "::endgroup::"
