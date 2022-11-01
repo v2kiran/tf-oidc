@@ -96,6 +96,8 @@ jobs:
         #Write-Output "::error file=app.js,line=1::Missing semicolon"
         Write-Output "::notice file=app.js,line=1,col=5,endColumn=7::Missing semicolon"
 
+        write-verbose "this is a verbose message"
+
         "This is the lead in sentence for the list" >> $env:GITHUB_STEP_SUMMARY
         "" >> $env:GITHUB_STEP_SUMMARY # this is a blank line
         "- Lets add a bullet point" >> $env:GITHUB_STEP_SUMMARY
