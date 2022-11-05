@@ -65,8 +65,8 @@ jobs:
         write-output ("{0} - {1} - {2}" -f  ("#" * 30),'[Begin: Github Workspace]',("#" * 30))
 
         . ps/output.ps1 -verbose -outvariable myout
-        write-output "num1=$($myout.number1)" | Out-File -FilePath $Env:GITHUB_ENV -Append
-        write-output "num2=$($myout.number2)" | Out-File -FilePath $Env:GITHUB_ENV -Append
+        "num1=$($myout.number1)" | Out-File -FilePath $Env:GITHUB_ENV -Append
+        "num2=$($myout.number2)" | Out-File -FilePath $Env:GITHUB_ENV -Append
 
         write-output ("{0} - {1} - {2}" -f  ("#" * 30),'[End: Github Workspace]',("#" * 30))
       shell: pwsh
