@@ -32,9 +32,9 @@ jobs:
     name: Azure Job
     runs-on: ubuntu-latest
     environment: tfplan
-    defaults:
-      run:
-        working-directory: ${{ env.tf_actions_working_dir }}
+    # defaults:
+    #   run:
+    #     working-directory: ${{ env.tf_actions_working_dir }}
 
     steps:
     - uses: actions/checkout@v2
@@ -79,5 +79,6 @@ jobs:
 
     - name: PowerShell Script - test environment variables
       run: |
+            dir | select name,fullname
           ./${{ github.workspace }}/ps/myps.ps1
       shell: pwsh
