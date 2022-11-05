@@ -29,7 +29,7 @@ permissions:
 
 jobs:
   plan:
-    name: Terraform plan
+    name: Azure Job
     runs-on: ubuntu-latest
     environment: tfplan
     defaults:
@@ -40,7 +40,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Disable workflow commands
-      if: ${{ inputs.wfcommands }}
+      #if: ${{ inputs.wfcommands }}
       run: |
         Write-Output '::warning:: This is a warning message, to demonstrate that commands are being processed.'
         write-warning "This is a warning message"
@@ -64,13 +64,13 @@ jobs:
       shell: pwsh
 
     - name: Log in to Azure using OIDC
-      if: ${{ inputs.azlogin }}
+      #if: ${{ inputs.azlogin }}
       uses: azure/login@v1
       with:
           creds: ${{secrets.AZURE_CREDENTIALS}}
           enable-AzPSSession: true
 
-    - name: Deploy Hub
+    - name: Azure PowerShell InlineScript - run az ps commands
       uses: azure/powershell@v1
       with:
         inlineScript: |
