@@ -1,0 +1,74 @@
+﻿name: Environments
+
+on:
+  workflow_dispatch:
+    inputs:
+      destroy:
+        type: boolean
+        description: Destroy environment?
+        required: true
+        default: false
+
+
+  pull_request:
+    paths:
+    - infra/**
+
+  push:
+    branches:
+      - 'main'
+      - 'releases/**'
+
+
+env:
+  tf_actions_working_dir: infra
+
+jobs:
+  plan:
+    name:   ${{matrix.runner}} - ${{ matrix.environment }}
+    runs-on: [ '${{ matrix.runner }}']
+    strategy:
+      max-parallel: 2
+      matrix:
+         include:
+           - environment: dev
+             runner: ubuntu-latest
+             envfile: dev.env
+           - environment: prod
+             runner: ubuntu-latest
+             envfile: prod.env
+
+    steps:
+    - uses: actions/checkout@v2
+
+    # - name: Log in to Azure using client secret
+    #   #if: ${{ inputs.azlogin }}
+    #   uses: azure/login@v1
+    #   with:
+    #       creds: ${{secrets.AZURE_CREDENTIALS}}
+    #       enable-AzPSSession: true
+
+    # - name: Azure PowerShell InlineScript - run az ps commands
+    #   uses: azure/powershell@v1
+    #   with:
+    #     inlineScript: |
+    #       get-azresourcegroup
+    #     azPSVersion: "latest"
+
+    - name: 'Configure Environment variables using the default variables file'
+      uses: ./.github/actions/set-env-vars
+      with:
+        varFilePath: ./.github/variables/${{ matrix.environment }}.env
+
+    # - name: PowerShell Script - test environment variables
+    #   run: |
+    #     $pwd
+    #     dir $pwd | select name,fullname
+    #     write-output ("{0} - {1} - {2}" -f  ("#" * 30),'[Begin: Github Workspace]',("#" * 30))
+    #     dir ${{ github.workspace }} | select name,fullname
+    #     write-output ("{0} - {1} - {2}" -f  ("#" * 30),'[End: Github Workspace]',("#" * 30))
+
+    #     #. ps/myps.ps1 -first '${{ env.firstenv }}' -verbose
+    #     . ps/myps.ps1 -verbose
+
+    #   shell: pwsh
