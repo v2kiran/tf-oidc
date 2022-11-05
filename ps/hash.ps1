@@ -10,7 +10,7 @@ param (
 )
 
 
-@{
-    NUMBER3 = "NUMBER3"
-    NUMBER4 = "NUMBER4"
+[PSCustomObject]@{
+    NUMBER3 = 'NUMBER-3'
+    NUMBER4 = 'NUMBER-4'
 }

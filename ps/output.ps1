@@ -11,6 +11,6 @@ param (
 
 
 [PSCustomObject]@{
-    NUMBER1 = "NUMBER-1"
-    NUMBER2 = "NUMBER-2"
+    NUMBER1 = 'NUMBER-1'
+    NUMBER2 = 'NUMBER-2'
 }
