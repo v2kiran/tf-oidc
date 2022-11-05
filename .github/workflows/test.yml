@@ -1,0 +1,78 @@
+﻿name: Infra deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      destroy:
+        type: boolean
+        description: Destroy environment?
+        required: true
+        default: false
+
+
+  pull_request:
+    paths:
+    - infra/**
+
+  push:
+    branches:
+      - 'main'
+      - 'releases/**'
+
+
+env:
+  tf_actions_working_dir: infra
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  plan:
+    name: Terraform plan
+    runs-on: ubuntu-latest
+    environment: tfplan
+    defaults:
+      run:
+        working-directory: ${{ env.tf_actions_working_dir }}
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Disable workflow commands
+      if: ${{ inputs.wfcommands }}
+      run: |
+        Write-Output '::warning:: This is a warning message, to demonstrate that commands are being processed.'
+        write-warning "This is a warning message"
+        Write-Output "::group::My title"
+        Write-Output "Inside group"
+        Write-Output "::endgroup::"
+        $octo = "myocto hello"
+        Write-Output "::debug::Set the Octocat variable: $octo"
+        #Write-Output "::error file=app.js,line=1::Missing semicolon"
+        Write-Output "::notice file=app.js,line=1,col=5,endColumn=7::Missing semicolon"
+
+        write-verbose "this is a verbose message" -verbose
+
+        "This is the lead in sentence for the list" >> $env:GITHUB_STEP_SUMMARY
+        "" >> $env:GITHUB_STEP_SUMMARY # this is a blank line
+        "- Lets add a bullet point" >> $env:GITHUB_STEP_SUMMARY
+        "- Lets add a second bullet point" >> $env:GITHUB_STEP_SUMMARY
+        "- How about a third one?" >> $env:GITHUB_STEP_SUMMARY
+
+        "some" >> $env:GITHUB_PATH
+      shell: pwsh
+
+    - name: Log in to Azure using OIDC
+      if: ${{ inputs.azlogin }}
+      uses: azure/login@v1
+      with:
+          creds: ${{secrets.AZURE_CREDENTIALS}}
+          enable-AzPSSession: true
+
+    - name: Deploy Hub
+      uses: azure/powershell@v1
+      with:
+        inlineScript: |
+          get-azresourcegroup
+        azPSVersion: "latest"
