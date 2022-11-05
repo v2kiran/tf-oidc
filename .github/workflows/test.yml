@@ -32,36 +32,9 @@ jobs:
     name: Azure Job
     runs-on: ubuntu-latest
     environment: tfplan
-    # defaults:
-    #   run:
-    #     working-directory: ${{ env.tf_actions_working_dir }}
 
     steps:
     - uses: actions/checkout@v2
-
-    # - name: Disable workflow commands
-    #   #if: ${{ inputs.wfcommands }}
-    #   run: |
-    #     Write-Output '::warning:: This is a warning message, to demonstrate that commands are being processed.'
-    #     write-warning "This is a warning message"
-    #     Write-Output "::group::My title"
-    #     Write-Output "Inside group"
-    #     Write-Output "::endgroup::"
-    #     $octo = "myocto hello"
-    #     Write-Output "::debug::Set the Octocat variable: $octo"
-    #     #Write-Output "::error file=app.js,line=1::Missing semicolon"
-    #     Write-Output "::notice file=app.js,line=1,col=5,endColumn=7::Missing semicolon"
-
-    #     write-verbose "this is a verbose message" -verbose
-
-    #     "This is the lead in sentence for the list" >> $env:GITHUB_STEP_SUMMARY
-    #     "" >> $env:GITHUB_STEP_SUMMARY # this is a blank line
-    #     "- Lets add a bullet point" >> $env:GITHUB_STEP_SUMMARY
-    #     "- Lets add a second bullet point" >> $env:GITHUB_STEP_SUMMARY
-    #     "- How about a third one?" >> $env:GITHUB_STEP_SUMMARY
-
-    #     "some" >> $env:GITHUB_PATH
-    #   shell: pwsh
 
     # - name: Log in to Azure using client secret
     #   #if: ${{ inputs.azlogin }}
@@ -77,8 +50,8 @@ jobs:
     #       get-azresourcegroup
     #     azPSVersion: "latest"
 
-      - name: PowerShell Script - test environment variables
-        run: |
-              dir | select name,fullname
-            ./${{ github.workspace }}/ps/myps.ps1
-        shell: pwsh
+    - name: PowerShell Script - test environment variables
+      run: |
+            dir | select name,fullname
+          ./${{ github.workspace }}/ps/myps.ps1
+      shell: pwsh
