@@ -34,9 +34,9 @@ jobs:
            - environment: dev
              runner: ubuntu-latest
              envfile: dev.env
-           - environment: prod
-             runner: ubuntu-latest
-             envfile: prod.env
+          #  - environment: prod
+          #    runner: ubuntu-latest
+          #    envfile: prod.env
 
     steps:
     - uses: actions/checkout@v2
@@ -60,15 +60,20 @@ jobs:
       with:
         varFilePath: ./.github/variables/${{ matrix.environment }}.env
 
-    # - name: PowerShell Script - test environment variables
-    #   run: |
-    #     $pwd
-    #     dir $pwd | select name,fullname
-    #     write-output ("{0} - {1} - {2}" -f  ("#" * 30),'[Begin: Github Workspace]',("#" * 30))
-    #     dir ${{ github.workspace }} | select name,fullname
-    #     write-output ("{0} - {1} - {2}" -f  ("#" * 30),'[End: Github Workspace]',("#" * 30))
+    - name: PowerShell Script - test environment variables
+      run: |
+        write-output ("{0} - {1} - {2}" -f  ("#" * 30),'[Begin: Github Workspace]',("#" * 30))
 
-    #     #. ps/myps.ps1 -first '${{ env.firstenv }}' -verbose
-    #     . ps/myps.ps1 -verbose
+        . ps/output.ps1 -verbose -outvariable myout
+        write-output "num1=$($myout.number1)" | Out-File -FilePath $Env:GITHUB_ENV -Append
+        write-output "num2=$($myout.number2)" | Out-File -FilePath $Env:GITHUB_ENV -Append
 
-    #   shell: pwsh
+        write-output ("{0} - {1} - {2}" -f  ("#" * 30),'[End: Github Workspace]',("#" * 30))
+      shell: pwsh
+
+    - name: PowerShell Script - output env vars
+      run: |
+        write-output $env:num1
+        write-output $env:num2
+
+      shell: pwsh
