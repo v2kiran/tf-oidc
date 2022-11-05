@@ -90,8 +90,8 @@ jobs:
         write-output ("{0} - {1} - {2}" -f  ("#" * 30),'[End: Github Workspace]',("#" * 30))
       shell: pwsh
 
-    - name: PowerShell Script - output env vars hash
+    - name: PowerShell Script - output env vars hash - env vars are case-sensitive
       run: |
         write-output $env:NUMBER3
-        write-output $env:number4
+        write-output $env:NUMBER4
       shell: pwsh
