@@ -60,7 +60,7 @@ jobs:
       with:
         varFilePath: ./.github/variables/${{ matrix.environment }}.env
 
-    - name: PowerShell Script - test environment variables
+    - name: PowerShell Script - pscustomobject
       run: |
         write-output ("{0} - {1} - {2}" -f  ("#" * 30),'[Begin: Github Workspace]',("#" * 30))
 
@@ -76,4 +76,25 @@ jobs:
         write-output $env:num1
         write-output $env:num2
 
+      shell: pwsh
+
+    - name: PowerShell Script - Hash table
+      run: |
+        write-output ("{0} - {1} - {2}" -f  ("#" * 30),'[Begin: Github Workspace]',("#" * 30))
+
+        . ps/hash.ps1 -verbose -outvariable myout
+        $myout.getenumerator() | foreach-object { "$($_.key)=$($_.value) | Out-File -FilePath $Env:GITHUB_ENV -Append }
+        "hash=$myout" | Out-File -FilePath $Env:GITHUB_ENV -Append
+
+
+        write-output ("{0} - {1} - {2}" -f  ("#" * 30),'[End: Github Workspace]',("#" * 30))
+      shell: pwsh
+
+    - name: PowerShell Script - output env vars hash
+      run: |
+        write-output $env:number3
+        write-output $env:number4
+        write-output $env:hash
+        $myhash = $env:hash
+        $myhash | get-member
       shell: pwsh
