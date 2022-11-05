@@ -84,8 +84,7 @@ jobs:
 
         . ps/hash.ps1 -verbose -outvariable myout
         $myout.getenumerator() | foreach-object { "$($_.key)=$($_.value) | Out-File -FilePath $Env:GITHUB_ENV -Append }
-        "hash=$myout" | Out-File -FilePath $Env:GITHUB_ENV -Append
-
+        #"hash=$myout" | Out-File -FilePath $Env:GITHUB_ENV -Append
 
         write-output ("{0} - {1} - {2}" -f  ("#" * 30),'[End: Github Workspace]',("#" * 30))
       shell: pwsh
@@ -94,7 +93,4 @@ jobs:
       run: |
         write-output $env:number3
         write-output $env:number4
-        write-output $env:hash
-        $myhash = $env:hash
-        $myhash | get-member
       shell: pwsh
