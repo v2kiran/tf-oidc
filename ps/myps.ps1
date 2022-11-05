@@ -13,15 +13,14 @@ write-verbose ("this is env:firstenv:{0}" -f $env:firstenv)
 
 $env:firstenv
 Write-Verbose "after printing firstenv"
-($env:firstenv).tostring()
 $env:firstenv | ConvertTo-Json
 
-$first = $env:firstenv
+#$first = $env:firstenv
 
 Write-Verbose ("this is first : [{0}]" -f $first)
-Write-Verbose ("this is first to string: [{0}]" -f $first.ToString())
 
 
+$first -eq 'my first env'
 
 switch ($first)
 {

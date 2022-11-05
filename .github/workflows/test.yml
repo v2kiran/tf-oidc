@@ -63,5 +63,5 @@ jobs:
         dir ${{ github.workspace }} | select name,fullname
         write-output ("{0} - {1} - {2}" -f  ("#" * 30),'[End: Github Workspace]',("#" * 30))
 
-        . ps/myps.ps1 -verbose
+        . ps/myps.ps1 -first ${{ env:firstenv }} -verbose
       shell: pwsh
