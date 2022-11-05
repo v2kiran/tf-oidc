@@ -52,5 +52,9 @@ jobs:
 
     - name: PowerShell Script - test environment variables
       run: |
+        $pwd
+        dir $pwd | select name,fullname
+        write-output ("#" * 90)
+        dir ${{ github.workspace }} | select name,fullname
         ./${{ github.workspace }}/ps/myps.ps1
       shell: pwsh
