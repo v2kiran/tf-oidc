@@ -1,0 +1,30 @@
+﻿name: Caller Workflows
+
+on:
+  workflow_dispatch:
+    inputs:
+      destroy:
+        type: boolean
+        description: Destroy environment?
+        required: true
+        default: false
+
+  push:
+    branches:
+      - 'main'
+      - 'releases/**'
+
+
+jobs:
+  call-workflow-A:
+    uses: ./.github/workflows/called.yml@main
+    with:
+      PSScriptPath: ps/hash.ps1
+      envvar: dev
+
+  # call-workflow-B:
+  #   uses: HoussemDellai/github-actions-course/.github/workflows/080-reusable-workflow-called.yml@main
+  #   with:
+  #     username: Dellai
+  #   secrets:
+  #     token: ${{ secrets.TOKEN }}

@@ -1,0 +1,32 @@
+﻿name: Called Workflow
+
+on:
+  workflow_call:
+    inputs:
+      PSScriptPath:
+        required: true
+        type: string
+      envvar:
+        required: true
+        type: string
+
+jobs:
+  example_job:
+    runs-on: ubuntu-latest
+    steps:
+    - name: 'Load Environment Variables'
+      uses: ./.github/actions/set-env-vars
+      with:
+        varFilePath: ./.github/variables/${{ inputs.envvar }}.env
+
+    - name: PowerShell Script - Hash table
+      run: |
+        write-output ("{0} - {1} - {2}" -f  ("#" * 30),'[Begin: Setting Environment Variables]',("#" * 30))
+
+        . ${{ inputs.PSScriptPath }} -verbose -outvariable myout
+          $myout | Get-Member -MemberType NoteProperty | ForEach-Object {
+              "$($_.Name)=$($myout.$($_.Name))"
+          } | Out-File -FilePath $Env:GITHUB_ENV -Append
+
+        write-output ("{0} - {1} - {2}" -f  ("#" * 30),'[End: Setting Environment Variables]',("#" * 30))
+      shell: pwsh

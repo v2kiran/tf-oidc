@@ -16,7 +16,7 @@ on:
 
   push:
     branches:
-      - 'main'
+      #- 'main'
       - 'releases/**'
 
 
@@ -80,14 +80,14 @@ jobs:
 
     - name: PowerShell Script - Hash table
       run: |
-        write-output ("{0} - {1} - {2}" -f  ("#" * 30),'[Begin: Github Workspace]',("#" * 30))
+        write-output ("{0} - {1} - {2}" -f  ("#" * 30),'[Begin: Setting Environment Variables]',("#" * 30))
 
         . ps/hash.ps1 -verbose -outvariable myout
           $myout | Get-Member -MemberType NoteProperty | ForEach-Object {
               "$($_.Name)=$($myout.$($_.Name))"
           } | Out-File -FilePath $Env:GITHUB_ENV -Append
 
-        write-output ("{0} - {1} - {2}" -f  ("#" * 30),'[End: Github Workspace]',("#" * 30))
+        write-output ("{0} - {1} - {2}" -f  ("#" * 30),'[End: Setting Environment Variables]',("#" * 30))
       shell: pwsh
 
     - name: PowerShell Script - output env vars hash - env vars are case-sensitive
