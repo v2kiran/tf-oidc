@@ -17,7 +17,7 @@ on:
 
 jobs:
   call-workflow-A:
-    uses: ./.github/workflows/called.yml@main
+    uses: ./.github/workflows/called.yml
     with:
       PSScriptPath: ps/hash.ps1
       envvar: dev
