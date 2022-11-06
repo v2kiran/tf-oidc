@@ -14,6 +14,8 @@ jobs:
   example_job:
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v2
+
     - name: 'Load Environment Variables'
       uses: ./.github/actions/set-env-vars
       with:
