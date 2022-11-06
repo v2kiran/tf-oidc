@@ -16,13 +16,13 @@ on:
 
 
 jobs:
-  call-workflow-A:
+  call-ps-hash:
     uses: ./.github/workflows/called.yml
     with:
       PSScriptPath: ps/hash.ps1
       envvar: dev
 
-  call-workflow-A:
+  call-ps-output:
     uses: ./.github/workflows/called.yml
     with:
       PSScriptPath: ps/output.ps1
