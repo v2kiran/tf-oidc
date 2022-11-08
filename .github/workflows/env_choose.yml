@@ -2,12 +2,12 @@
 
 on:
   workflow_dispatch:
-    inputs:
-      destroy:
-        type: boolean
-        description: Destroy environment?
-        required: true
-        default: false
+    # inputs:
+    #   destroy:
+    #     type: boolean
+    #     description: Destroy environment?
+    #     required: true
+    #     default: false
 
 
   pull_request:
@@ -36,9 +36,9 @@ jobs:
            - environment: dev
              runner: ubuntu-latest
              envfile: dev.env
-          #  - environment: prod
-          #    runner: windows-latest
-          #    envfile: prod.env
+           - environment: prod
+             runner: windows-latest
+             envfile: prod.env
       fail-fast: true
       max-parallel: 2
 
