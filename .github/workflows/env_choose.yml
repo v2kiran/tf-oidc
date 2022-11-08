@@ -31,16 +31,15 @@ jobs:
       name: ${{ matrix.environment }}
     strategy:
       max-parallel: 2
+      fail-fast: true
       matrix:
          include:
            - environment: dev
              runner: ubuntu-latest
              envfile: dev.env
-           - environment: prod
-             runner: windows-latest
-             envfile: prod.env
-      fail-fast: true
-      max-parallel: 2
+          #  - environment: prod
+          #    runner: windows-latest
+          #    envfile: prod.env
 
     steps:
     - uses: actions/checkout@v2
