@@ -23,6 +23,36 @@ jobs:
     steps:
       - run: build
 ```
+sample-2
+
+```
+name: Sample Run Include Syntax Json Format
+on: push
+# The Trigger event
+jobs:
+  job1:
+    runs-on: ubuntu-latest
+    outputs:
+	# Making use of job.output
+       matrix: ${{ steps.setmatrix.outputs.matrix }}
+    steps:
+      - name: Set Dynamic Matrix
+        id: setmatrix
+        run: |
+           matrixStringifiedObject="{\"include\":[{\"run\":\"run1\"},{\"run\":\"run2\"}]}"
+           echo "::set-output name=matrix::$matrixStringifiedObject"
+  job2:
+    needs: job1
+    runs-on: ubuntu-latest
+    strategy:
+		# Making use of fromJson (JSON syntax)
+      matrix: ${{ fromJson(needs.job1.outputs.matrix) }}
+    steps:
+    - run: echo Run ${{ matrix.run }}
+    - run: date
+    - run: sleep 1
+    - run: date
+```
 
 
 ## if
@@ -74,7 +104,7 @@ jobs:
     strategy:
       matrix:
         stage: ['development', 'integration', 'production']
-
+        os:    ['ubuntu','windows-latest']
       fail-fast: true
       max-parallel: 1
     runs-on: ${{ matrix.os }}
@@ -106,10 +136,13 @@ deploy-prod:
         include:
           - environment: dev
             os: ubuntu-latest
+            varfile: dev
           - environment: tst
             os: windows-latest
+            varfile: tst
           - environment: prod
             os: ubunutu-latest
+            varfile: prod
     environment:
       name: ${{ matrix.environment }}
     runs-on: ${{ matrix.os }}
