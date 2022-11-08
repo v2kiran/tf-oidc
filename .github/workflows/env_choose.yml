@@ -27,6 +27,8 @@ jobs:
   plan:
     name:   ${{matrix.runner}} - ${{ matrix.environment }}
     runs-on: [ '${{ matrix.runner }}']
+    environment:
+      name: ${{ matrix.environment }}
     strategy:
       max-parallel: 2
       matrix:
@@ -34,64 +36,51 @@ jobs:
            - environment: dev
              runner: ubuntu-latest
              envfile: dev.env
-          #  - environment: prod
-          #    runner: ubuntu-latest
-          #    envfile: prod.env
+           - environment: prod
+             runner: windows-latest
+             envfile: prod.env
 
     steps:
     - uses: actions/checkout@v2
 
-    # - name: Log in to Azure using client secret
-    #   #if: ${{ inputs.azlogin }}
-    #   uses: azure/login@v1
-    #   with:
-    #       creds: ${{secrets.AZURE_CREDENTIALS}}
-    #       enable-AzPSSession: true
-
-    # - name: Azure PowerShell InlineScript - run az ps commands
-    #   uses: azure/powershell@v1
-    #   with:
-    #     inlineScript: |
-    #       get-azresourcegroup
-    #     azPSVersion: "latest"
 
     - name: 'Configure Environment variables using the default variables file'
       uses: ./.github/actions/set-env-vars
       with:
         varFilePath: ./.github/variables/${{ matrix.environment }}.env
 
-    - name: PowerShell Script - pscustomobject
-      run: |
-        write-output ("{0} - {1} - {2}" -f  ("#" * 30),'[Begin: Github Workspace]',("#" * 30))
+    # - name: PowerShell Script - pscustomobject
+    #   run: |
+    #     write-output ("{0} - {1} - {2}" -f  ("#" * 30),'[Begin: Github Workspace]',("#" * 30))
 
-        . ps/output.ps1 -verbose -outvariable myout
-        "num1=$($myout.number1)" | Out-File -FilePath $Env:GITHUB_ENV -Append
-        "num2=$($myout.number2)" | Out-File -FilePath $Env:GITHUB_ENV -Append
+    #     . ps/output.ps1 -verbose -outvariable myout
+    #     "num1=$($myout.number1)" | Out-File -FilePath $Env:GITHUB_ENV -Append
+    #     "num2=$($myout.number2)" | Out-File -FilePath $Env:GITHUB_ENV -Append
 
-        write-output ("{0} - {1} - {2}" -f  ("#" * 30),'[End: Github Workspace]',("#" * 30))
-      shell: pwsh
+    #     write-output ("{0} - {1} - {2}" -f  ("#" * 30),'[End: Github Workspace]',("#" * 30))
+    #   shell: pwsh
 
-    - name: PowerShell Script - output env vars
-      run: |
-        write-output $env:num1
-        write-output $env:num2
+    # - name: PowerShell Script - output env vars
+    #   run: |
+    #     write-output $env:num1
+    #     write-output $env:num2
 
-      shell: pwsh
+    #   shell: pwsh
 
-    - name: PowerShell Script - Hash table
-      run: |
-        write-output ("{0} - {1} - {2}" -f  ("#" * 30),'[Begin: Setting Environment Variables]',("#" * 30))
+    # - name: PowerShell Script - Hash table
+    #   run: |
+    #     write-output ("{0} - {1} - {2}" -f  ("#" * 30),'[Begin: Setting Environment Variables]',("#" * 30))
 
-        . ps/hash.ps1 -verbose -outvariable myout
-          $myout | Get-Member -MemberType NoteProperty | ForEach-Object {
-              "$($_.Name)=$($myout.$($_.Name))"
-          } | Out-File -FilePath $Env:GITHUB_ENV -Append
+    #     . ps/hash.ps1 -verbose -outvariable myout
+    #       $myout | Get-Member -MemberType NoteProperty | ForEach-Object {
+    #           "$($_.Name)=$($myout.$($_.Name))"
+    #       } | Out-File -FilePath $Env:GITHUB_ENV -Append
 
-        write-output ("{0} - {1} - {2}" -f  ("#" * 30),'[End: Setting Environment Variables]',("#" * 30))
-      shell: pwsh
+    #     write-output ("{0} - {1} - {2}" -f  ("#" * 30),'[End: Setting Environment Variables]',("#" * 30))
+    #   shell: pwsh
 
-    - name: PowerShell Script - output env vars hash - env vars are case-sensitive
-      run: |
-        write-output $env:NUMBER3
-        write-output $env:NUMBER4
-      shell: pwsh
+    # - name: PowerShell Script - output env vars hash - env vars are case-sensitive
+    #   run: |
+    #     write-output $env:NUMBER3
+    #     write-output $env:NUMBER4
+    #   shell: pwsh
