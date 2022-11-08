@@ -81,5 +81,3 @@ jobs:
         write-output $env:NUMBER4
       shell: pwsh
 
-    - name: From JSON
-      run: echo ${{ fromJSON('{"FAVORITE_FRUIT": "APPLE", "FAVORITE_COLOR": "BLUE"}') }}
