@@ -36,9 +36,9 @@ jobs:
            - environment: dev
              runner: ubuntu-latest
              envfile: dev.env
-           - environment: prod
-             runner: windows-latest
-             envfile: prod.env
+          #  - environment: prod
+          #    runner: windows-latest
+          #    envfile: prod.env
       fail-fast: true
       max-parallel: 2
 
@@ -69,20 +69,15 @@ jobs:
 
     #   shell: pwsh
 
-    # - name: PowerShell Script - Hash table
-    #   run: |
-    #     write-output ("{0} - {1} - {2}" -f  ("#" * 30),'[Begin: Setting Environment Variables]',("#" * 30))
+    - name: PowerShell Script - foreach loop on pscustomobject
+      run: |
+        write-output ("{0} - {1} - {2}" -f  ("#" * 30),'[Begin: Setting Environment Variables]',("#" * 30))
+        . ps/hash.ps1 -verbose
+        write-output ("{0} - {1} - {2}" -f  ("#" * 30),'[End: Setting Environment Variables]',("#" * 30))
+      shell: pwsh
 
-    #     . ps/hash.ps1 -verbose -outvariable myout
-    #       $myout | Get-Member -MemberType NoteProperty | ForEach-Object {
-    #           "$($_.Name)=$($myout.$($_.Name))"
-    #       } | Out-File -FilePath $Env:GITHUB_ENV -Append
-
-    #     write-output ("{0} - {1} - {2}" -f  ("#" * 30),'[End: Setting Environment Variables]',("#" * 30))
-    #   shell: pwsh
-
-    # - name: PowerShell Script - output env vars hash - env vars are case-sensitive
-    #   run: |
-    #     write-output $env:NUMBER3
-    #     write-output $env:NUMBER4
-    #   shell: pwsh
+    - name: PowerShell Script - output env vars hash - env vars are case-sensitive
+      run: |
+        write-output $env:NUMBER3
+        write-output $env:NUMBER4
+      shell: pwsh
