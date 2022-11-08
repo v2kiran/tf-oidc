@@ -154,3 +154,90 @@ deploy-prod:
       version: ${{ needs.deploy-staging.outputs.version }}
       environment: ${{ matrix.environment }}
 ```
+
+## if
+
+```
+name: If
+
+on: push
+
+jobs:
+  if:
+    name: If
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        node: [4, 6, 8, 10, 12]
+    steps:
+    - run: echo ${{ (matrix.node > 8 && 'foo') || 'bar' }}
+  ```
+
+  sample-2: startswith
+
+  ```
+      name: Print if starts with 'He'
+        if: ${{ startsWith(matrix.greeting, 'He') }}
+        run: echo "greeting starts with He"
+  ```
+
+
+## Expressions
+Use equality operators to get a boolean result; in this case we are only running the step when the greeting is “Hello”. Note the use of single quotes for the string literal. You can use ==, !=, <, <=, >, >=, &&, ||, and ( ... ). Learn more about operators here
+
+```
+name: expressions-example
+on:
+  push:
+  pull:
+jobs:
+  use-expressions:
+    strategy:
+      matrix:
+        greeting: [Hello, Howdy, Hey]
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Print if 'Hello'
+        if: ${{ matrix.greeting == 'Hello' }}
+        run: echo "greeting is Hello"
+      -
+        name: Print if starts with 'He'
+        if: ${{ startsWith(matrix.greeting, 'He') }}
+        run: echo "greeting starts with He"
+      -
+        name: Print if ends with 'y'
+        if: ${{ endsWith(matrix.greeting, 'y') }}
+        run: echo "greeting ends with y"
+      -
+        name: Print if contains 'ow'
+        if: ${{ contains(matrix.greeting, 'ow') }}
+        run: echo "greeting contains ow"
+      -
+        name: Print formatted greeting
+        run: |
+          echo "${{ format('{0} says {1}', github.actor, matrix.greeting) }}"
+      -
+        name: To JSON
+        run: echo 'Job context is ${{ toJSON(job) }}'
+      -
+        name: From JSON
+        env: ${{ fromJSON('{"FAVORITE_FRUIT": "APPLE", "FAVORITE_COLOR": "BLUE"}') }}
+        run: echo "I would like a ${FAVORITE_COLOR} ${FAVORITE_FRUIT}"
+      -
+        name: Success
+        if: ${{ success() }}
+        run: echo "Still running..."
+      -
+        name: Always
+        if: ${{ always() }}
+        run: echo "You will always see this"
+      -
+        name: Canceled
+        if: ${{ canceled() }}
+        run: echo "You canceled the workflow"
+      -
+        name: Failure
+        if: ${{ failure() }}
+        run: echo "Something went wrong..."
+```
