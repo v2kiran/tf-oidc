@@ -39,6 +39,8 @@ jobs:
            - environment: prod
              runner: windows-latest
              envfile: prod.env
+      fail-fast: true
+      max-parallel: 2
 
     steps:
     - uses: actions/checkout@v2
