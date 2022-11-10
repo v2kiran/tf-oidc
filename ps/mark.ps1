@@ -1,5 +1,7 @@
 ﻿param($header1, $header2)
+\
 
+Set-PSRepository -Name psgallery -InstallationPolicy Trusted
 Install-Module FormatMarkdownTable
 Import-Module FormatMarkdownTable
 Function ConvertTo-Markdown
