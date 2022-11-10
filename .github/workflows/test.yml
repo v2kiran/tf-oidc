@@ -68,7 +68,19 @@ jobs:
       run: |
         $json = '${{ toJSON(github) }}' | convertfrom-json
         $json.ref
+
+        write-verbose "already in datetime format" -verbose
         $json.event.repository.updated_at
-        write-verbose "this is datetime" -verbose
-        [datetime]$json.event.repository.updated_at
       shell: pwsh
+
+
+    - name: Adding markdown
+      shell: pwsh
+      run: |
+        '### Hello world! :rocket:' >> $GITHUB_STEP_SUMMARY
+
+    - name: Adding markdown2
+      shell: pwsh
+      run: |
+        '### Hello world! :rocket:' >> $GITHUB_STEP_SUMMARY
+        . ps/mark.ps1
