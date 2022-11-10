@@ -68,5 +68,7 @@ jobs:
       run: |
         $json = '${{ toJSON(github) }}' | convertfrom-json
         $json.ref
-        $json.event
+        $json.event.repository.updated_at
+        write-verbose "this is datetime" -verbose
+        [datetime]$json.event.repository.updated_at
       shell: pwsh
