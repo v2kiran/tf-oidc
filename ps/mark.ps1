@@ -9,4 +9,4 @@ $here = @"
 "@
 $here
 
-$here | out-file  $GITHUB_STEP_SUMMARY -Append
+$here | out-file  $env:GITHUB_STEP_SUMMARY -Append

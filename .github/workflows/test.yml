@@ -82,4 +82,4 @@ jobs:
       shell: pwsh
       run: |
         . ps/mark.ps1 -outvariable myout
-        $myout | out-file $GITHUB_STEP_SUMMARY -append
+        $myout | out-file $env:GITHUB_STEP_SUMMARY -append
