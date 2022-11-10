@@ -16,7 +16,7 @@ on:
 
   push:
     branches:
-      - 'main'
+      #- 'main'
       - 'releases/**'
 
 
@@ -80,4 +80,3 @@ jobs:
         write-output $env:NUMBER3
         write-output $env:NUMBER4
       shell: pwsh
-

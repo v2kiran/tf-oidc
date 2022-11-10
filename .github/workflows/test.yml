@@ -16,16 +16,12 @@ on:
 
   push:
     branches:
-      #- 'main'
+      - 'main'
       - 'releases/**'
 
 
 env:
   tf_actions_working_dir: infra
-
-permissions:
-  id-token: write
-  contents: read
 
 jobs:
   plan:
@@ -50,20 +46,25 @@ jobs:
     #       get-azresourcegroup
     #     azPSVersion: "latest"
 
-    - name: 'Configure Environment variables using the default variables file'
-      uses: ./.github/actions/set-env-vars
-      with:
-        varFilePath: ./.github/variables/default.env
+    # - name: 'Configure Environment variables using the default variables file'
+    #   uses: ./.github/actions/set-env-vars
+    #   with:
+    #     varFilePath: ./.github/variables/default.env
+
+    # - name: PowerShell Script - test environment variables
+    #   run: |
+    #     $pwd
+    #     dir $pwd | select name,fullname
+    #     write-output ("{0} - {1} - {2}" -f  ("#" * 30),'[Begin: Github Workspace]',("#" * 30))
+    #     dir ${{ github.workspace }} | select name,fullname
+    #     write-output ("{0} - {1} - {2}" -f  ("#" * 30),'[End: Github Workspace]',("#" * 30))
+
+    #     #. ps/myps.ps1 -first '${{ env.firstenv }}' -verbose
+    #     . ps/myps.ps1 -verbose
+
+    #   shell: pwsh
 
     - name: PowerShell Script - test environment variables
       run: |
-        $pwd
-        dir $pwd | select name,fullname
-        write-output ("{0} - {1} - {2}" -f  ("#" * 30),'[Begin: Github Workspace]',("#" * 30))
-        dir ${{ github.workspace }} | select name,fullname
-        write-output ("{0} - {1} - {2}" -f  ("#" * 30),'[End: Github Workspace]',("#" * 30))
-
-        #. ps/myps.ps1 -first '${{ env.firstenv }}' -verbose
-        . ps/myps.ps1 -verbose
-
+        ${{ github }}
       shell: pwsh
