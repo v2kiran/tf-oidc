@@ -1,7 +1,8 @@
-﻿param($header1,$header2)
+﻿param($header1, $header2)
 
 
-Function ConvertTo-Markdown {
+Function ConvertTo-Markdown
+{
     [CmdletBinding()]
     [OutputType([string])]
     Param (
@@ -13,18 +14,23 @@ Function ConvertTo-Markdown {
         [PSObject[]]$collection
     )
 
-    Begin {
+    Begin
+    {
         $items = @()
         $columns = @{}
     }
 
-    Process {
-        ForEach($item in $collection) {
+    Process
+    {
+        ForEach ($item in $collection)
+        {
             $items += $item
 
             $item.PSObject.Properties | ForEach-Object {
-                if ($null -ne $_.Value ){
-                    if(-not $columns.ContainsKey($_.Name) -or $columns[$_.Name] -lt $_.Value.ToString().Length) {
+                if ($null -ne $_.Value )
+                {
+                    if (-not $columns.ContainsKey($_.Name) -or $columns[$_.Name] -lt $_.Value.ToString().Length)
+                    {
                         $columns[$_.Name] = $_.Value.ToString().Length
                     }
                 }
@@ -32,26 +38,32 @@ Function ConvertTo-Markdown {
         }
     }
 
-    End {
-        ForEach($key in $($columns.Keys)) {
+    End
+    {
+        ForEach ($key in $($columns.Keys))
+        {
             $columns[$key] = [Math]::Max($columns[$key], $key.Length)
         }
 
         $header = @()
-        ForEach($key in $columns.Keys) {
+        ForEach ($key in $columns.Keys)
+        {
             $header += ('{0,-' + $columns[$key] + '}') -f $key
         }
         $header -join ' | '
 
         $separator = @()
-        ForEach($key in $columns.Keys) {
+        ForEach ($key in $columns.Keys)
+        {
             $separator += '-' * $columns[$key]
         }
         $separator -join ' | '
 
-        ForEach($item in $items) {
+        ForEach ($item in $items)
+        {
             $values = @()
-            ForEach($key in $columns.Keys) {
+            ForEach ($key in $columns.Keys)
+            {
                 $values += ('{0,-' + $columns[$key] + '}') -f $item.($key)
             }
             $values -join ' | '
@@ -59,9 +71,28 @@ Function ConvertTo-Markdown {
     }
 }
 
-$ser = gsv wl* | select Name,DisplayName,Status
 
+$ser = @"
+[
+  {
+    "Name": "WlanSvc",
+    "DisplayName": "WLAN AutoConfig",
+    "Status": 4
+  },
+  {
+    "Name": "wlidsvc",
+    "DisplayName": "Microsoft Account Sign-in Assistant",
+    "Status": 4
+  },
+  {
+    "Name": "wlpasvc",
+    "DisplayName": "Local Profile Assistant Service",
+    "Status": 1
+  }
+]
+"@
 
+$ser | ConvertFrom-Json
 
 $here = @"
 | $header1  | $header2 |
@@ -69,7 +100,7 @@ $here = @"
 | Content Cell  | Content Cell  |
 | Content Cell  | Content Cell  |
 
-$($ser | convertto-markdown)
+$($ser | ConvertFrom-Json | ConvertTo-Markdown)
 
 
 "@
@@ -83,4 +114,4 @@ $here
 # })
 
 
-$here | out-file  $env:GITHUB_STEP_SUMMARY -Append
+$here | Out-File $env:GITHUB_STEP_SUMMARY -Append
