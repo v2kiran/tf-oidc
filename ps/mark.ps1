@@ -1,9 +1,9 @@
 ﻿param($header1, $header2)
 \
 
-Set-PSRepository -Name psgallery -InstallationPolicy Trusted
-Install-Module FormatMarkdownTable
-Import-Module FormatMarkdownTable
+# Set-PSRepository -Name psgallery -InstallationPolicy Trusted
+# Install-Module FormatMarkdownTable
+# Import-Module FormatMarkdownTable
 Function ConvertTo-Markdown
 {
     [CmdletBinding()]
@@ -95,25 +95,26 @@ $ser = @"
 ]
 "@
 
-$ser | ConvertFrom-Json
 
 $here = @"
 | $header1  | $header2 |
 | ------------- | ------------- |
 | Content Cell  | Content Cell  |
 | Content Cell  | Content Cell  |
-
-
-
 "@
 
-$here
 
-# | Name  | DisplayName | Status |
-# $(foreach ($s in $ser)
-# {
-# `| $s.name `| $s.DisplayName `| $s.Status `|
-# })
+$s1 = $ser | ConvertFrom-Json
+$n = @"
+| Name  | DisplayName | Status |
+$(foreach ($s in $s1 )
+{
 
-$($ser | ConvertFrom-Json | fml -HideStandardOutput -ShowMarkdown)
-$here | Out-File $env:GITHUB_STEP_SUMMARY -Append
+"|{0}|{1}|{2}`n" -f  $s.name, $s.DisplayName, $s.Status
+})
+
+"@
+$n
+
+# $($ser | ConvertFrom-Json | fml -HideStandardOutput -ShowMarkdown)
+$n | Out-File $env:GITHUB_STEP_SUMMARY -Append
