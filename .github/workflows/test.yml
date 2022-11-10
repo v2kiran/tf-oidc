@@ -66,5 +66,5 @@ jobs:
 
     - name: PowerShell Script - test environment variables
       run: |
-        ${{ toJSON(github) }} | convertfrom-json
+        '${{ toJSON(github) }}' | convertfrom-json
       shell: pwsh
