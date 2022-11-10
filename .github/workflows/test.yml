@@ -76,7 +76,7 @@ jobs:
 
     - name: Adding markdown
       run: |
-        '### Hello world! :rocket:' >> $GITHUB_STEP_SUMMARY
+        echo '### Hello world! :rocket:' >> $GITHUB_STEP_SUMMARY
 
     - name: Adding markdown2
       shell: pwsh
