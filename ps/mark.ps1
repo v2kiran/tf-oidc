@@ -107,6 +107,7 @@ $here = @"
 $s1 = $ser | ConvertFrom-Json
 $n = @"
 | Name  | DisplayName | Status |
+| ----- | ----------- | ------ |
 $(foreach ($s in $s1 )
 {
 
