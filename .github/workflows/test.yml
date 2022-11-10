@@ -81,5 +81,4 @@ jobs:
     - name: Adding markdown2
       shell: pwsh
       run: |
-        . ps/mark.ps1 -outvariable myout
-        #$myout | out-file $env:GITHUB_STEP_SUMMARY -append
+        . ps/mark.ps1 -header1 "Yellow" -header2 "Orange" -outvariable myout

@@ -2,7 +2,7 @@
 
 
 $here = @"
-| First Header  | Second Header |
+| $header1  | $header2 |
 | ------------- | ------------- |
 | Content Cell  | Content Cell  |
 | Content Cell  | Content Cell  |
