@@ -1,9 +1,9 @@
 ﻿param($header1, $header2)
 
 
-# Set-PSRepository -Name psgallery -InstallationPolicy Trusted
-# Install-Module FormatMarkdownTable
-# Import-Module FormatMarkdownTable
+Set-PSRepository -Name psgallery -InstallationPolicy Trusted
+Install-Module FormatMarkdownTable
+Import-Module FormatMarkdownTable
 Function ConvertTo-Markdown
 {
     [CmdletBinding()]
@@ -119,3 +119,6 @@ $n
 
 # $($ser | ConvertFrom-Json | fml -HideStandardOutput -ShowMarkdown)
 $n | Out-File $env:GITHUB_STEP_SUMMARY -Append
+
+"something" >> $env:GITHUB_STEP_SUMMARY
+$ser | ConvertFrom-Json | fml -HideStandardOutput -ShowMarkdown >> $env:GITHUB_STEP_SUMMARY
