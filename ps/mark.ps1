@@ -7,5 +7,6 @@ $here = @"
 | Content Cell  | Content Cell  |
 | Content Cell  | Content Cell  |
 "@
+$here
 
-$here >> $GITHUB_STEP_SUMMARY
+$here | out-file  $GITHUB_STEP_SUMMARY -Append

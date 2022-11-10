@@ -81,4 +81,5 @@ jobs:
     - name: Adding markdown2
       shell: pwsh
       run: |
-        . ps/mark.ps1
+        . ps/mark.ps1 -outvariable myout
+        $myout | out-file $GITHUB_STEP_SUMMARY -append
