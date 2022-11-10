@@ -103,7 +103,7 @@ $here = @"
 | Content Cell  | Content Cell  |
 | Content Cell  | Content Cell  |
 
-$($ser | ConvertFrom-Json | fml -HideStandardOutput -ShowMarkdown)
+
 
 "@
 
@@ -115,5 +115,5 @@ $here
 # `| $s.name `| $s.DisplayName `| $s.Status `|
 # })
 
-
+$($ser | ConvertFrom-Json | fml -HideStandardOutput -ShowMarkdown)
 $here | Out-File $env:GITHUB_STEP_SUMMARY -Append
