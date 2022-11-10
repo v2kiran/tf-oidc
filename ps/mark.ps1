@@ -1,6 +1,7 @@
 ﻿param($header1, $header2)
 
-
+Install-Module FormatMarkdownTable
+Import-Module FormatMarkdownTable
 Function ConvertTo-Markdown
 {
     [CmdletBinding()]
@@ -100,8 +101,7 @@ $here = @"
 | Content Cell  | Content Cell  |
 | Content Cell  | Content Cell  |
 
-$($ser | ConvertFrom-Json | ConvertTo-Markdown)
-
+$($ser | ConvertFrom-Json | fml -HideStandardOutput -ShowMarkdown)
 
 "@
 
