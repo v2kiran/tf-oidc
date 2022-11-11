@@ -1,4 +1,4 @@
-﻿name: Azure Deploy
+﻿name: Tags Deploy
 
 on:
   workflow_dispatch:
@@ -47,5 +47,10 @@ jobs:
       uses: azure/powershell@v1
       with:
         inlineScript: |
-          New-AzTag -ResourceId '/subscriptions/${{ secrets.SUBSCRIPTION_ID }}/resourceGroups/az204-acr-rg' -Tag ${{ env.SubscriptionTags }} -verbose
+          $a = '${{ env.SubscriptionTags }}'
+          $b = ${{ env.SubscriptionTags }}
+          $a | get-member
+          write-verbose "this is b" -verbose
+          $b | get-member
+          #New-AzTag -ResourceId '/subscriptions/${{ secrets.SUBSCRIPTION_ID }}/resourceGroups/az204-acr-rg' -Tag '${{ env.SubscriptionTags }}' -verbose
         azPSVersion: "latest"
