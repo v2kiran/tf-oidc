@@ -121,4 +121,4 @@ $n
 $n | Out-File $env:GITHUB_STEP_SUMMARY -Append
 
 "something" >> $env:GITHUB_STEP_SUMMARY
-$ser | ConvertFrom-Json | fml -HideStandardOutput -ShowMarkdown >> $env:GITHUB_STEP_SUMMARY
+$ser | ConvertFrom-Json | Format-MarkdownTableTableStyle -HideStandardOutput -DoNotCopyToClipboard -ShowMarkdown >> $env:GITHUB_STEP_SUMMARY
