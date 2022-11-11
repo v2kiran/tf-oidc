@@ -47,8 +47,5 @@ jobs:
       uses: azure/powershell@v1
       with:
         inlineScript: |
-          $a = ${{ env.SubscriptionTags }}
-          $a | get-member
-          #$b = ${{ env.SubscriptionTags }}
-          #New-AzTag -ResourceId '/subscriptions/${{ secrets.SUBSCRIPTION_ID }}/resourceGroups/az204-acr-rg' -Tag '${{ env.SubscriptionTags }}' -verbose
+          New-AzTag -ResourceId '/subscriptions/${{ secrets.SUBSCRIPTION_ID }}/resourceGroups/az204-acr-rg' -Tag ${{ env.SubscriptionTags }} -verbose
         azPSVersion: "latest"
