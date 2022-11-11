@@ -47,11 +47,8 @@ jobs:
       uses: azure/powershell@v1
       with:
         inlineScript: |
-          $a = ${{ 'env.SubscriptionTags' }}
-          write-verbose ${{ env.this }}
-          #$b = ${{ env.SubscriptionTags }}
+          $a = ${{ env.SubscriptionTags }}
           $a | get-member
-          # write-verbose "this is b" -verbose
-          # $b | get-member
+          #$b = ${{ env.SubscriptionTags }}
           #New-AzTag -ResourceId '/subscriptions/${{ secrets.SUBSCRIPTION_ID }}/resourceGroups/az204-acr-rg' -Tag '${{ env.SubscriptionTags }}' -verbose
         azPSVersion: "latest"
