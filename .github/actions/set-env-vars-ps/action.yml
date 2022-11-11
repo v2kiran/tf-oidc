@@ -1,0 +1,25 @@
+﻿name: "Set environment variables"
+description: "Configures environment variables for a workflow"
+inputs:
+  varFilePath:
+    description: "File path(s) to variable file(s) delimited by a semicolon"
+    required: false
+    default: ./.github/variables/default.env
+runs:
+  using: "composite"
+  steps:
+    - run: |
+        $env_var_array = "${{ inputs.varFilePath }}" -split ";"
+        write-verbose ("These are the ENV files:`n {0}" -f ($env_var_array -join "`n")) -verbose
+        $env_var_array | foreach-Object {
+          $parent = Split-Path $_ -Parent
+          $leaf = (Split-Path $_ -Leaf).ToLowerInvariant()
+          $var_file = Join-Path $parent $leaf
+          write-verbose "Loading file: [$var_file]" -verbose
+          get-content $var_file | foreach-Object {
+            #$name,$value = $_.split('=')
+            write-verbose "Loading variable: [$_]"
+            "$_" | Out-File -FilePath $Env:GITHUB_ENV -Append
+          }
+        }
+      shell: pwsh

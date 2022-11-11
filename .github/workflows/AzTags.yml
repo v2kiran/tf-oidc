@@ -1,0 +1,51 @@
+﻿name: Azure Deploy
+
+on:
+  workflow_dispatch:
+    # inputs:
+    #   destroy:
+    #     type: boolean
+    #     description: Destroy environment?
+    #     required: true
+    #     default: false
+
+
+  pull_request:
+    paths:
+    - infra/**
+
+  push:
+    branches:
+      - 'main'
+      - 'releases/**'
+
+
+env:
+  tf_actions_working_dir: infra
+
+jobs:
+  plan:
+    name: Azure Job
+    runs-on: ubuntu-latest
+    environment: tfplan
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Log in to Azure using client secret
+      uses: azure/login@v1
+      with:
+          creds: ${{secrets.AZURE_CREDENTIALS}}
+          enable-AzPSSession: true
+
+    - name: 'Configure Environment variables using the default variables file'
+      uses: ./.github/actions/set-env-vars-ps
+      with:
+        varFilePath: ./.github/variables/hash.env
+
+    - name: Set AZ Tags
+      uses: azure/powershell@v1
+      with:
+        inlineScript: |
+          New-AzTag -ResourceId '/subscriptions/${{ secrets.SUBSCRIPTION_ID }}/resourceGroups/az204-acr-rg' -Tag ${{ env.SubscriptionTags }} -verbose
+        azPSVersion: "latest"

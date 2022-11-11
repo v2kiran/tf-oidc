@@ -75,7 +75,7 @@ Function ConvertTo-Markdown
 }
 
 
-$ser = @"
+$ser = @'
 [
   {
     "Name": "WlanSvc",
@@ -93,7 +93,7 @@ $ser = @"
     "Status": 1
   }
 ]
-"@
+'@
 
 
 $here = @"
@@ -120,5 +120,8 @@ $n
 # $($ser | ConvertFrom-Json | fml -HideStandardOutput -ShowMarkdown)
 $n | Out-File $env:GITHUB_STEP_SUMMARY -Append
 
-"something" >> $env:GITHUB_STEP_SUMMARY
+'something' >> $env:GITHUB_STEP_SUMMARY
 $ser | ConvertFrom-Json | Format-MarkdownTableTableStyle -HideStandardOutput -DoNotCopyToClipboard -ShowMarkdown >> $env:GITHUB_STEP_SUMMARY
+
+# list style
+#$ser | ConvertFrom-Json | Format-MarkdownTableListStyle  -HideStandardOutput -DoNotCopyToClipboard -ShowMarkdown >> $env:GITHUB_STEP_SUMMARY
