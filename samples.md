@@ -241,3 +241,47 @@ jobs:
         if: ${{ failure() }}
         run: echo "Something went wrong..."
 ```
+
+
+## format operator
+
+```
+on: push
+jobs:
+    Test2:
+        if: ${{contains(github.event.commits[0].message, format('autorelease{0} pending', ':'))}}
+        runs-on: ubuntu-latest
+        steps:
+        - run: echo ${{github.event.commits[0].message}}
+```
+or
+
+```
+on: pull_request
+jobs:
+    Test2:
+        if: "${{ contains(github.event.pull_request.labels.*.name, 'autorelease: pending') }}"
+        runs-on: ubuntu-latest
+        steps:
+        - run: echo Hello World
+```
+
+or
+
+```
+on: push
+jobs:
+    Test2:
+        if: |
+            ${{ contains(github.event.pull_request.labels.*.name, "autorelease: pending") }}
+        runs-on: ubuntu-latest
+        steps:
+        - run: echo ${{github.event.commits[0].message}}
+```
+
+
+## Escape curly braces
+
+```
+${{ '${{VAR}}' }}
+```
