@@ -32,11 +32,11 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Log in to Azure using client secret
-      uses: azure/login@v1
-      with:
-          creds: ${{secrets.AZURE_CREDENTIALS}}
-          enable-AzPSSession: true
+    # - name: Log in to Azure using client secret
+    #   uses: azure/login@v1
+    #   with:
+    #       creds: ${{secrets.AZURE_CREDENTIALS}}
+    #       enable-AzPSSession: true
 
     - name: 'Configure Environment variables using the default variables file'
       uses: ./.github/actions/set-env-vars-ps
@@ -47,10 +47,11 @@ jobs:
       uses: azure/powershell@v1
       with:
         inlineScript: |
-          $a = '${{ env.SubscriptionTags }}'
-          $b = ${{ env.SubscriptionTags }}
+          $a = ${{ 'env.SubscriptionTags' }}
+          write-verbose ${{ env.this }}
+          #$b = ${{ env.SubscriptionTags }}
           $a | get-member
-          write-verbose "this is b" -verbose
-          $b | get-member
+          # write-verbose "this is b" -verbose
+          # $b | get-member
           #New-AzTag -ResourceId '/subscriptions/${{ secrets.SUBSCRIPTION_ID }}/resourceGroups/az204-acr-rg' -Tag '${{ env.SubscriptionTags }}' -verbose
         azPSVersion: "latest"
