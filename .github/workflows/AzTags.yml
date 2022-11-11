@@ -38,7 +38,7 @@ jobs:
           creds: ${{secrets.AZURE_CREDENTIALS}}
           enable-AzPSSession: true
 
-    - name: 'Configure Environment variables using the default variables file'
+    - name: Load Environment variables
       uses: ./.github/actions/set-env-vars-ps
       with:
         varFilePath: ./.github/variables/hash.env
