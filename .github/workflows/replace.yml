@@ -1,4 +1,4 @@
-﻿name: Tags Deploy
+﻿name: Replace
 
 on:
   workflow_dispatch:
@@ -10,16 +10,14 @@ on:
           - DEV_HUB
           - TST_ENV
 
-
   pull_request:
     paths:
-    - infra/**
+      - infra/**
 
   push:
     branches:
-      - 'main'
-      - 'releases/**'
-
+      - "main"
+      - "releases/**"
 
 env:
   tf_actions_working_dir: infra
@@ -29,35 +27,40 @@ jobs:
     name: Azure Job
     runs-on: ubuntu-latest
     environment: tfplan
+    outputs:
+      RunsOn: ${{ steps.runson.outputs.runson }}
 
     steps:
-    # - uses: actions/checkout@v2
+      # - uses: actions/checkout@v2
 
-    # - name: Print formatted greeting
-    #   run: |
-    #     echo "${{ format('{0}-ENV', endsWith(inputs.env, 'HUB')) }}"
+      # - name: Print formatted greeting
+      #   run: |
+      #     echo "${{ format('{0}-ENV', endsWith(inputs.env, 'HUB')) }}"
 
-    - name: Set env
-      run: |
-        if( ${{ inputs.env }} -eq DEV  )
-        {
-          "RunsON=windows-latest"  | Out-File -FilePath $Env:GITHUB_ENV -Append
-        }
-        else
-        {
-          "RunsON=ubuntu-latest"  | Out-File -FilePath $Env:GITHUB_ENV -Append
-        }
-      shell: pwsh
+      - name: Set env
+        id: runson
+        run: |
+          if( ${{ inputs.env }} -eq DEV  )
+          {
+            "RunsON=windows-latest"  | Out-File -FilePath $Env:GITHUB_ENV -Append
+            "::set-output name=runson::windows-latest"
+          }
+          else
+          {
+            "RunsON=ubuntu-latest"  | Out-File -FilePath $Env:GITHUB_ENV -Append
+            "::set-output name=runson::ubuntu-latest"
+          }
+        shell: pwsh
 
   Deploy:
     name: Azure Job
-    runs-on: ${{ env.RunsON }}
+    runs-on: ${{ needs.Determine_Runs_On.outputs.RunsON }}
     environment: tfplan
 
     steps:
-    # - uses: actions/checkout@v2
+      # - uses: actions/checkout@v2
 
-    - name: Print formatted greeting
-      run: |
-        echo "this is ${{inputs.env}} on ${{ env.RunsON }}"
-      shell: pwsh
+      - name: Print formatted greeting
+        run: |
+          echo "this is ${{inputs.env}} on ${{ needs.Determine_Runs_On.outputs.RunsON }}"
+        shell: pwsh
