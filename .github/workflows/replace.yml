@@ -23,12 +23,12 @@ env:
   tf_actions_working_dir: infra
 
 jobs:
-  Determine_Runs_On:
+  job1:
     name: Azure Job
     runs-on: ubuntu-latest
     environment: tfplan
     outputs:
-      RunsOn: ${{ steps.runson.outputs.runson }}
+      runson: ${{ steps.runson.outputs.runson }}
 
     steps:
       # - uses: actions/checkout@v2
@@ -40,21 +40,21 @@ jobs:
       - name: Set env
         id: runson
         run: |
-          if( ${{ inputs.env }} -eq DEV  )
+          if( '${{ inputs.env }}' -eq 'DEV'  )
           {
-            "RunsON=windows-latest"  | Out-File -FilePath $Env:GITHUB_ENV -Append
+            "runson=windows-latest"  | Out-File -FilePath $Env:GITHUB_ENV -Append
             "::set-output name=runson::windows-latest"
           }
           else
           {
-            "RunsON=ubuntu-latest"  | Out-File -FilePath $Env:GITHUB_ENV -Append
+            "runson=ubuntu-latest"  | Out-File -FilePath $Env:GITHUB_ENV -Append
             "::set-output name=runson::ubuntu-latest"
           }
         shell: pwsh
 
   Deploy:
     name: Azure Job
-    runs-on: ${{ needs.Determine_Runs_On.outputs.RunsON }}
+    runs-on: ${{ needs.job1.outputs.runson }}
     environment: tfplan
 
     steps:
@@ -62,5 +62,5 @@ jobs:
 
       - name: Print formatted greeting
         run: |
-          echo "this is ${{inputs.env}} on ${{ needs.Determine_Runs_On.outputs.RunsON }}"
+          echo "this is ${{inputs.env}} on ${{ needs.Determine_Runs_On.outputs.runson }}"
         shell: pwsh
