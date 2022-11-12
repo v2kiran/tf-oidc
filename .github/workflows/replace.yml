@@ -1,0 +1,63 @@
+﻿name: Tags Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      env:
+        default: TST
+        type: choice
+        options:
+          - DEV_HUB
+          - TST_ENV
+
+
+  pull_request:
+    paths:
+    - infra/**
+
+  push:
+    branches:
+      - 'main'
+      - 'releases/**'
+
+
+env:
+  tf_actions_working_dir: infra
+
+jobs:
+  Determine_Runs_On:
+    name: Azure Job
+    runs-on: ubuntu-latest
+    environment: tfplan
+
+    steps:
+    # - uses: actions/checkout@v2
+
+    # - name: Print formatted greeting
+    #   run: |
+    #     echo "${{ format('{0}-ENV', endsWith(inputs.env, 'HUB')) }}"
+
+    - name: Set env
+      run: |
+        if( ${{ inputs.env }} -eq DEV  )
+        {
+          "RunsON=windows-latest"  | Out-File -FilePath $Env:GITHUB_ENV -Append
+        }
+        else
+        {
+          "RunsON=ubuntu-latest"  | Out-File -FilePath $Env:GITHUB_ENV -Append
+        }
+      shell: pwsh
+
+  Deploy:
+    name: Azure Job
+    runs-on: ${{ env.RunsON }}
+    environment: tfplan
+
+    steps:
+    # - uses: actions/checkout@v2
+
+    - name: Print formatted greeting
+      run: |
+        echo "this is ${{inputs.env}} on ${{ env.RunsON }}"
+      shell: pwsh
