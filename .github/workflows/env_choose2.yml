@@ -1,0 +1,45 @@
+﻿name: Environments2
+
+on:
+  workflow_dispatch:
+
+
+  push:
+    branches:
+      - 'main'
+      - 'releases/**'
+
+
+env:
+  tf_actions_working_dir: infra
+
+jobs:
+  plan:
+    name:   ${{matrix.runner}} - ${{ matrix.environment }}
+    runs-on: [ '${{ matrix.runner }}']
+    environment: ${{ matrix.environment }}
+    strategy:
+      max-parallel: 2
+      fail-fast: true
+      matrix:
+         include:
+           - environment: tfplan
+             runner: ubuntu-latest
+             envfile: dev.env
+           - environment: dev
+             runner: windows-latest
+             envfile: prod.env
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: 'Configure Environment variables using the default variables file'
+      uses: ./.github/actions/set-env-vars-ps
+      with:
+        varFilePath: ./.github/variables/${{ matrix.envfile }}
+
+    - name: PowerShell Script - output env vars hash - env vars are case-sensitive
+      run: |
+        write-output $env:NUMBER3
+        write-output $env:NUMBER4
+      shell: pwsh
