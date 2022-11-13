@@ -285,3 +285,81 @@ jobs:
 ```
 ${{ '${{VAR}}' }}
 ```
+
+## Composite Action
+
+```
+# yaml-language-server: $schema=https://json.schemastore.org/github-action.json
+name: 'Publish to OpenVSIX Gallery'
+description: 'Publishes a Visual Studio extension (VSIX) to the OpenVSIX Gallery'
+branding:
+  icon: upload-cloud
+  color: purple
+inputs:
+  readme:
+    description: 'Path to readme file'
+    required: false
+    default: ''
+  vsix-file:
+    description: 'Path to VSIX file'
+    requried: true
+runs:
+  using: "composite"
+  steps:
+    - name: Publish to Gallery
+      id: publish_gallery
+      shell: pwsh
+      run: |
+        $repo = ""
+        $issueTracker = ""
+
+        # If no readme URL was specified, default to "<branch_name>/README.md"
+        if (-not "${{ inputs.readme }}") {
+          $readmeUrl = "$Env:GITHUB_REF_NAME/README.md"
+        } else {
+          $readmeUrl = "${{ inputs.readme }}"
+        }
+
+        $repoUrl = "$Env:GITHUB_SERVER_URL/$Env:GITHUB_REPOSITORY/"
+
+        [Reflection.Assembly]::LoadWithPartialName("System.Web") | Out-Null
+        $repo = [System.Web.HttpUtility]::UrlEncode($repoUrl)
+        $issueTracker = [System.Web.HttpUtility]::UrlEncode(($repoUrl + "issues/"))
+        $readmeUrl = [System.Web.HttpUtility]::UrlEncode($readmeUrl)
+
+        # $fileNames = (Get-ChildItem $filePath -Recurse -File)
+        $vsixFile = "${{ inputs.vsix-file }}"
+        $vsixUploadEndpoint = "https://www.vsixgallery.com/api/upload"
+
+        [string]$url = ($vsixUploadEndpoint + "?repo=" + $repo + "&issuetracker=" + $issueTracker + "&readmeUrl=" + $readmeUrl)
+        [byte[]]$bytes = [System.IO.File]::ReadAllBytes($vsixFile)
+
+        try {
+            $webclient = New-Object System.Net.WebClient
+            $webclient.UploadFile($url, $vsixFile) | Out-Null
+            'OK' | Write-Host -ForegroundColor Green
+        }
+        catch{
+            'FAIL' | Write-Error
+            $_.Exception.Response.Headers["x-error"] | Write-Error
+        }
+```
+
+
+## define env vars
+
+```
+jobs:
+  terraform:
+    name: "Terraform"
+    runs-on: ubuntu-latest
+    env:
+         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+         AWS_DEFAULT_REGION: eu-central-1
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+```
