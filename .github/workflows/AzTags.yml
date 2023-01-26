@@ -43,6 +43,17 @@ jobs:
       with:
         varFilePath: .github/variables/hash.env;.github/variables/sections.env::one::three;.github/variables/sections2.env::four
 
+    - name: PowerShell Script - check env vars
+      run: |
+          #$env.SubscriptionTags | get-member
+          write-verbose ("this is computer3") -verbose
+          $env.Computer3
+          ${{ env.Computer3 }}
+          write-verbose ("this is computer4") -verbose
+          $env.Computer4
+          ${{ env.Computer4 }}
+      shell: pwsh
+
     - name: Set AZ Tags
       uses: azure/powershell@v1
       with:
