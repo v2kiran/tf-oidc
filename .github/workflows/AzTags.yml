@@ -45,12 +45,10 @@ jobs:
 
     - name: PowerShell Script - check env vars
       run: |
-          $subs = $env.SubscriptionTags 
-          write-verbose ("this is computer3") -verbose
-          write-verbose $env.Computer3 -verbose
-          write-verbose ${{ env.Computer3 }}
-          write-verbose ("this is computer4") -verbose
-          write-verbose $env.Computer4 -verbose
+          $subs = $env.SubscriptionTags
+          write-verbose ("this is var3") -verbose
+          write-verbose ${{ env.Computer3 }} -verbose
+          write-verbose ("this is var4") -verbose
           write-verbose ${{ env.Computer4 }} -verbose
       shell: pwsh
 
