@@ -70,7 +70,7 @@ runs:
 
                  $sec_hash = $section_object[$s]
                  $sec_hash.GetEnumerator() | ForEach-Object {
-                    write-verbose ("Loading variable {0} from section: ['{1}'']" -f "$($_.key)=$($_.value)", $s) -verbose
+                    #write-verbose ("Loading variable {0} from section: ['{1}'']" -f "$($_.key)=$($_.value)", $s) -verbose
                     "$($_.key)=$($_.value)" | Out-File -FilePath $Env:GITHUB_ENV -Append
                   }
               }

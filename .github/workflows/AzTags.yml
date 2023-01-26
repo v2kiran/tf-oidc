@@ -46,6 +46,7 @@ jobs:
     - name: PowerShell Script - check env vars
       run: |
           $subs = $env.SubscriptionTags
+          write-verbose ${{ env.there }} -verbose
           write-verbose ("this is var3") -verbose
           write-verbose ${{ env.Computer3 }} -verbose
           write-verbose ("this is var4") -verbose
@@ -56,11 +57,13 @@ jobs:
       uses: azure/powershell@v1
       with:
         inlineScript: |
-          $env.SubscriptionTags | get-member
-          write-verbose ("this is computer3") -verbose
-          $env.Computer3
-          write-verbose ("this is computer4") -verbose
-          $env.Computer4
+          ${{ env.SubscriptionTags }} | get-member
+          write-verbose  ${{ env.SubscriptionTags }} -verbose
+          write-verbose ${{ env.there }} -verbose
+          write-verbose ("this is var3") -verbose
+          write-verbose ${{ env.Computer3 }} -verbose
+          write-verbose ("this is var4") -verbose
+          write-verbose ${{ env.Computer4 }} -verbose
 
           #New-AzTag -ResourceId '/subscriptions/${{ secrets.SUBSCRIPTION_ID }}/resourceGroups/az204-acr-rg' -Tag ${{ env.SubscriptionTags }} -verbose
         azPSVersion: "latest"
