@@ -41,7 +41,7 @@ jobs:
     - name: Load Environment variables
       uses: ./.github/actions/set-env-vars-ps-v2
       with:
-        varFilePath: .github/variables/hash.env;.github/variables/sections.env::one::three;.github/variables/sections2.env::four
+        varFilePath: .github/variables/hash.env;.github/variables/sections.env::one::three;.github/variables/sections2.env::four::one
 
     # - name: PowerShell Script - check env vars
     #   run: |
