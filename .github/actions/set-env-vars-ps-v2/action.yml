@@ -54,14 +54,13 @@ runs:
           $sections = $items | where {$_ -notmatch '\.env'}
           $number_of_sections = ($sections | Measure-Object).count
 
-          #write-verbose "the file [$file]" -verbose
-
+          write-verbose "`n" -verbose
+          write-verbose "Working on file [$file]" -verbose
+          write-verbose ("#" * 90) -verbose
 
           if($number_of_sections -gt 0)
           {
-              write-verbose "the section_names [$sections]" -verbose
-              write-verbose "the number of sections [$number_of_sections]" -verbose
-
+              write-verbose "section_names [[$number_of_sections]]: [$sections] for file ['$file']" -verbose
               $section_object = Get-SectionFile -path $file
 
               # load the sections variables
