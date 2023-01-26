@@ -51,14 +51,14 @@ runs:
           $items = $_ -split '::'
           $file = $items | where { $_ -match '\.env'}
           $sections = $items | where {$_ -notmatch '\.env'}
-
-          write-verbose "Beginning check for sections" -verbose
-          $section_object = Get-SectionFile -path $file
-          write-verbose "after check for sections" -verbose
-
           $number_of_sections = ($sections | Measure-Object).count
+
           if($number_of_sections -gt 0)
           {
+              write-verbose "Beginning check for sections" -verbose
+              $section_object = Get-SectionFile -path $file
+              write-verbose "after check for sections" -verbose
+
               # load the sections variables
               foreach($s in $sections)
               {

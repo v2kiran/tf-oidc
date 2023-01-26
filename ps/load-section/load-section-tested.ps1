@@ -39,7 +39,20 @@ $c1 = Get-IniFile -path $file
 $c1['Three']['computer3']
 
 
-$env_var_array = $file2 -split ';'
+
+
+
+<# $file2 -split ';' -replace '::.*'
+
+($g | Measure-Object).Count -gt 0
+
+$h = $c1['one']
+
+$h.GetEnumerator() | ForEach-Object {
+  "$($_.key)=$($_.value)"
+
+
+  $env_var_array = $file2 -split ';'
 $env_var_array | ForEach-Object {
   $items = $_ -split '::'
   $file = $items | Where-Object { $_ -match '\.env' }
@@ -48,14 +61,4 @@ $env_var_array | ForEach-Object {
   Write-Host 'this is sections ' -ForegroundColor Green
   $sections
 }
-
-
-$file2 -split ';' -replace '::.*'
-
-($g | Measure-Object).Count -gt 0
-
-$h = $c1['one']
-
-$h.GetEnumerator() | ForEach-Object {
-  "$($_.key)=$($_.value)"
-}
+} #>
