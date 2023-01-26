@@ -62,3 +62,7 @@ $env_var_array | ForEach-Object {
   $sections
 }
 } #>
+
+
+$array = $file2 -split ";" -replace '::.*'
+$array

@@ -44,9 +44,11 @@ runs:
         }
 
 
-        $env_var_array = "${{ inputs.varFilePath }}" -split ";" -replace '::.*'
+        $env_var_array = "${{ inputs.varFilePath }}" -split ";"
+        $env_var_array1 = "${{ inputs.varFilePath }}" -split ";" -replace '::.*'
 
-        write-verbose ("These are the ENV files:`n {0}" -f ($env_var_array -join "`n")) -verbose
+
+        write-verbose ("These are the ENV files:`n {0}" -f ($env_var_array1 -join "`n")) -verbose
         $env_var_array | foreach-Object {
           $items = $_ -split '::'
           $file = $items | where { $_ -match '\.env'}
