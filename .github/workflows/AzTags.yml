@@ -32,38 +32,37 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    # - name: Log in to Azure using client secret
-    #   uses: azure/login@v1
-    #   with:
-    #       creds: ${{secrets.AZURE_CREDENTIALS}}
-    #       enable-AzPSSession: true
+    - name: Log in to Azure using client secret
+      uses: azure/login@v1
+      with:
+          creds: ${{secrets.AZURE_CREDENTIALS}}
+          enable-AzPSSession: true
 
     - name: Load Environment variables
       uses: ./.github/actions/set-env-vars-ps-v2
       with:
         varFilePath: .github/variables/hash.env;.github/variables/sections.env::one::three;.github/variables/sections2.env::four
 
-    - name: PowerShell Script - check env vars
-      run: |
-          $subs = $env.SubscriptionTags
-          write-verbose ${{ env.there }} -verbose
-          write-verbose ("this is var3") -verbose
-          write-verbose ${{ env.Computer3 }} -verbose
-          write-verbose ("this is var4") -verbose
-          write-verbose ${{ env.Computer4 }} -verbose
-      shell: pwsh
+    # - name: PowerShell Script - check env vars
+    #   run: |
+    #       $subs = $env.SubscriptionTags
+    #       write-verbose ${{ env.there }} -verbose
+    #       write-verbose ("this is var3") -verbose
+    #       write-verbose ${{ env.Computer3 }} -verbose
+    #       write-verbose ("this is var4") -verbose
+    #       write-verbose ${{ env.Computer4 }} -verbose
+    #   shell: pwsh
 
     - name: Set AZ Tags
       uses: azure/powershell@v1
       with:
         inlineScript: |
           ${{ env.SubscriptionTags }} | get-member
-          write-verbose  ${{ env.SubscriptionTags }} -verbose
           write-verbose ${{ env.there }} -verbose
           write-verbose ("this is var3") -verbose
           write-verbose ${{ env.Computer3 }} -verbose
           write-verbose ("this is var4") -verbose
           write-verbose ${{ env.Computer4 }} -verbose
 
-          #New-AzTag -ResourceId '/subscriptions/${{ secrets.SUBSCRIPTION_ID }}/resourceGroups/az204-acr-rg' -Tag ${{ env.SubscriptionTags }} -verbose
+          New-AzTag -ResourceId '/subscriptions/${{ secrets.SUBSCRIPTION_ID }}/resourceGroups/az204-acr-rg' -Tag ${{ env.SubscriptionTags }} -verbose
         azPSVersion: "latest"
