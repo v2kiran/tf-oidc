@@ -60,7 +60,7 @@ runs:
 
           if($number_of_sections -gt 0)
           {
-              write-verbose "section_names [[$number_of_sections]]: [$sections] for file ['$file']" -verbose
+              write-verbose "section_names [$number_of_sections]: [$sections] for file ['$file']" -verbose
               $section_object = Get-SectionFile -path $file
 
               # load the sections variables
@@ -73,8 +73,7 @@ runs:
                     #write-verbose ("Loading variable {0} from section: ['{1}'']" -f "$($_.key)=$($_.value)", $s) -verbose
                     "$($_.key)=$($_.value)" | Out-File -FilePath $Env:GITHUB_ENV -Append
                   }
-              }
-
+              } # foreach
           }
           else
           {
@@ -84,13 +83,13 @@ runs:
               $var_file = Join-Path $parent $leaf
               write-verbose "Loading file: [$var_file]" -verbose
               get-content $var_file | foreach-Object {
-                #$name,$value = $_.split('=')
-                write-verbose "Loading variable: [$_]"
-                "$_" | Out-File -FilePath $Env:GITHUB_ENV -Append
-              }
-          }
 
-
-
+                if( ($_ -notmatch '^\[section:') -and ($_ -notmatch "^#") -and ($_.trim() -ne ""))
+                {
+                    write-verbose "Loading variable: [$_]"
+                    "$_" | Out-File -FilePath $Env:GITHUB_ENV -Append
+                }
+              } #foreach
+          }# else
         }
       shell: pwsh

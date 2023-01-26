@@ -63,6 +63,15 @@ $env_var_array | ForEach-Object {
 }
 } #>
 
+$file3 = "C:\gh\tf-oidc\.github\variables\sections2.env"
+get-content $file3 | foreach-Object {
+  if( ($_ -notmatch '^\[section:') -and ($_ -notmatch "^#") -and ($_.trim() -ne ""))
+  {
+    "$_"
+  }
+}
 
-$array = $file2 -split ";" -replace '::.*'
-$array
+
+"[section:one] this is " -match '^\[section:'
+
+-or ($_ -notmatch "^#")
