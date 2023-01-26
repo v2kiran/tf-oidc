@@ -22,6 +22,7 @@ runs:
           $ini = @{}
 
           Get-Content $inifile | ForEach-Object {
+            write-verbose "trim" -verbose
             $_.Trim()
           } | Where-Object {
             $_ -notmatch '^(#|$)'
@@ -51,7 +52,10 @@ runs:
           $file = $items | where { $_ -match '\.env'}
           $sections = $items | where {$_ -notmatch '\.env'}
 
+          write-verbose "Beginning check for sections" -verbose
           $section_object = Get-SectionFile -path $file
+          write-verbose "after check for sections" -verbose
+
           $number_of_sections = ($sections | Measure-Object).count
           if($number_of_sections -gt 0)
           {
