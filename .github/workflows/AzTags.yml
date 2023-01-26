@@ -48,8 +48,10 @@ jobs:
       with:
         inlineScript: |
           ${{ env.SubscriptionTags }} | get-member
-          write-host ("this is computer3: {0}" -f ${{ env.Computer3 }}) -fore magenta
-          write-host ("this is computer4: {0}" -f ${{ env.Computer4 }}) -fore magenta
+          write-host ("this is computer3") -fore magenta
+          ${{ env.Computer3 }}
+          write-host ("this is computer4") -fore magenta
+          ${{ env.Computer4 }}
 
-          New-AzTag -ResourceId '/subscriptions/${{ secrets.SUBSCRIPTION_ID }}/resourceGroups/az204-acr-rg' -Tag ${{ env.SubscriptionTags }} -verbose
+          #New-AzTag -ResourceId '/subscriptions/${{ secrets.SUBSCRIPTION_ID }}/resourceGroups/az204-acr-rg' -Tag ${{ env.SubscriptionTags }} -verbose
         azPSVersion: "latest"
