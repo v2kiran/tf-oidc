@@ -1,4 +1,6 @@
 ﻿$file = 'C:\gh\tf-oidc\.github\variables\sections.env'
+$file2 = 'C:\gh\tf-oidc\.github\variables\sections.env::two::three;C:\gh\tf-oidc\.github\variables\sections2.env::four;C:\gh\tf-oidc\.github\variables\sections2.env'
+
 
 Function Get-IniFile
 {
@@ -35,3 +37,25 @@ Function Get-IniFile
 
 $c1 = Get-IniFile -path $file
 $c1['Three']['computer3']
+
+
+$env_var_array = $file2 -split ';'
+$env_var_array | ForEach-Object {
+  $items = $_ -split '::'
+  $file = $items | Where-Object { $_ -match '\.env' }
+  $sections = $items | Where-Object { $_ -notmatch '\.env' }
+  Write-Host "this is file : $file" -ForegroundColor Magenta
+  Write-Host 'this is sections ' -ForegroundColor Green
+  $sections
+}
+
+
+$file2 -split ';' -replace '::.*'
+
+($g | Measure-Object).Count -gt 0
+
+$h = $c1['one']
+
+$h.GetEnumerator() | ForEach-Object {
+  "$($_.key)=$($_.value)"
+}

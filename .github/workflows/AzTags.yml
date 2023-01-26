@@ -16,7 +16,7 @@ on:
 
   push:
     branches:
-      #- 'main'
+      - 'main'
       - 'releases/**'
 
 
@@ -32,20 +32,24 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Log in to Azure using client secret
-      uses: azure/login@v1
-      with:
-          creds: ${{secrets.AZURE_CREDENTIALS}}
-          enable-AzPSSession: true
+    # - name: Log in to Azure using client secret
+    #   uses: azure/login@v1
+    #   with:
+    #       creds: ${{secrets.AZURE_CREDENTIALS}}
+    #       enable-AzPSSession: true
 
     - name: Load Environment variables
-      uses: ./.github/actions/set-env-vars-ps
+      uses: ./.github/actions/set-env-vars-ps-v2
       with:
-        varFilePath: ./.github/variables/hash.env
+        varFilePath: .github/variables/hash.env;.github/variables/sections.env::one::three;.github/variables/sections2.env::four
 
     - name: Set AZ Tags
       uses: azure/powershell@v1
       with:
         inlineScript: |
+          ${{ env.SubscriptionTags }} | get-member
+          write-host ("this is computer3: {0}" -f ${{ env.Computer3 }}) -fore magenta
+          write-host ("this is computer4: {0}" -f ${{ env.Computer4 }}) -fore magenta
+
           New-AzTag -ResourceId '/subscriptions/${{ secrets.SUBSCRIPTION_ID }}/resourceGroups/az204-acr-rg' -Tag ${{ env.SubscriptionTags }} -verbose
         azPSVersion: "latest"
