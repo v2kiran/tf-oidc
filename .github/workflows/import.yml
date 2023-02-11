@@ -1,0 +1,78 @@
+﻿name: Tags Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      Resources:
+        required: true
+        description: Enter Resource Details
+      ActivityType:
+        required: true
+        type: choice
+        description: What would you like to do?
+        options:
+          - replace
+          - import
+        default: import
+
+  push:
+    branches:
+      - 'main'
+      - 'releases/**'
+
+
+env:
+  tf_actions_working_dir: infra
+
+jobs:
+  plan:
+    name: Azure Job
+    runs-on: ubuntu-latest
+    environment: tfplan
+
+    steps:
+    - uses: actions/checkout@v2
+
+    # - name: Log in to Azure using client secret
+    #   uses: azure/login@v1
+    #   with:
+    #       creds: ${{secrets.AZURE_CREDENTIALS}}
+    #       enable-AzPSSession: true
+
+    - name: Load Environment variables
+      uses: ./.github/actions/set-env-vars-ps-v2
+      with:
+        varFilePath: .github/variables/hash.env;.github/variables/sections.env::one::three;.github/variables/sections2.env::four::one
+
+
+      - name: Generate the State File Name
+        run: |
+          Write-Host "${{inputs.Resources}}"
+          Write-Host "${{ env.backendAzureRmResourceGroupName}}"
+          Write-Host "${{ env.backendAzureRmStorageAccountName }}"
+          Write-Host "${{ env.backendAzureRmContainerName }}"
+
+          $resources = "${{inputs.Resources}}"
+          $resourceGroups = $resources.Split("::")
+
+          terraform init -backend-config="resource_group_name=${{ env.backendAzureRmResourceGroupName}}" -backend-config="storage_account_name=${{ env.backendAzureRmStorageAccountName }}" -backend-config="container_name=${{ env.backendAzureRmContainerName }}" -backend-config="key=${{ env.stateFile }}"
+          write-error "something wrong" -erroraction stop
+          ForEach($groups in $resourceGroups){
+              $split = $groups.Split(";");
+              #check if the resource exists in state file
+
+              $stateResponse = $(terraform state show '$split[0]')
+              Write-Host $stateResponse
+             if($stateResponse -eq $null){
+               if(${{inputs.ActivityType == 'replace'}}){
+                 terraform apply -replace="$split[0]"
+               }
+               elseif(${{inputs.ActivityType == 'import'}}){
+                 terraform import $split[0] $split[1]
+               }
+               else{
+                 terraform state rm $split[0]
+               }
+             }
+          }
+        shell: pwsh

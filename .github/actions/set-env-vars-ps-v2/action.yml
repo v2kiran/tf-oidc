@@ -1,5 +1,5 @@
 ﻿name: "Set environment variables"
-description: "Configures environment variables for a workflow"
+description: "Configures environment variables for a workflow. Comments and sections can be added"
 inputs:
   varFilePath:
     description: "File path(s) to variable file(s) delimited by a semicolon"
@@ -11,7 +11,6 @@ runs:
     - run: |
         Function Get-SectionFile
         {
-
           Param
           (
             [parameter(mandatory = $true)]
@@ -20,7 +19,6 @@ runs:
           )
           $inifile = $path
           $ini = @{}
-
           Get-Content $inifile | ForEach-Object {
             $_.Trim()
           } | Where-Object {
@@ -28,7 +26,7 @@ runs:
           } | ForEach-Object {
             if ($_ -match '^\[section:.*\]$')
             {
-              $section = $_ -replace '\[section:|\]'
+              $section = ($_ -replace '\[section:|\]').ToLowerInvariant()
               $ini[$section] = @{}
             }
             else
@@ -37,38 +35,31 @@ runs:
               $ini[$section][$key] = $value
             }
           }
-
           $ini
-
         }
-
-
         $env_var_array = "${{ inputs.varFilePath }}" -split ";"
         $env_var_array1 = "${{ inputs.varFilePath }}" -split ";" -replace '::.*'
-
-
         write-verbose ("These are the ENV files:`n {0}" -f ($env_var_array1 -join "`n")) -verbose
         $env_var_array | foreach-Object {
           $items = $_ -split '::'
           $file = $items | where { $_ -match '\.env'}
           $sections = $items | where {$_ -notmatch '\.env'}
           $number_of_sections = ($sections | Measure-Object).count
-
           write-verbose "`n" -verbose
           write-verbose "Working on file [$file]" -verbose
           write-verbose ("#" * 90) -verbose
-
+          $parent = Split-Path $file -Parent
+          $leaf = (Split-Path $file -Leaf).ToLowerInvariant()
+          $var_file = Join-Path $parent $leaf
           if($number_of_sections -gt 0)
           {
-              write-verbose "section_names [$number_of_sections]: [$sections] for file ['$file']" -verbose
-              $section_object = Get-SectionFile -path $file
-
+              write-verbose "section_names [$number_of_sections]: [$sections] for file ['$var_file']" -verbose
+              $section_object = Get-SectionFile -path $var_file
               # load the sections variables
               foreach($s in $sections)
               {
                 write-verbose "Loading variables from section: [$s]" -verbose
-
-                 $sec_hash = $section_object[$s]
+                 $sec_hash = $section_object[$($s.ToLowerInvariant())]
                  $sec_hash.GetEnumerator() | ForEach-Object {
                     #write-verbose ("Loading variable {0} from section: ['{1}'']" -f "$($_.key)=$($_.value)", $s) -verbose
                     "$($_.key)=$($_.value)" | Out-File -FilePath $Env:GITHUB_ENV -Append
@@ -78,12 +69,8 @@ runs:
           else
           {
               write-verbose "No sections found for file: [$file]" -verbose
-              $parent = Split-Path $file -Parent
-              $leaf = (Split-Path $file -Leaf).ToLowerInvariant()
-              $var_file = Join-Path $parent $leaf
-              write-verbose "Loading file: [$var_file]" -verbose
+              write-verbose "Loading the whole file: [$var_file]" -verbose
               get-content $var_file | foreach-Object {
-
                 if( ($_ -notmatch '^\[section:') -and ($_ -notmatch "^#") -and ($_.trim() -ne ""))
                 {
                     write-verbose "Loading variable: [$_]"
