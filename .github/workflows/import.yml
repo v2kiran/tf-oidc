@@ -22,10 +22,10 @@ on:
         required: true
         default: true
 
-  push:
-    branches:
-      - 'main'
-      - 'releases/**'
+  # push:
+  #   branches:
+  #     - 'main'
+  #     - 'releases/**'
 
 
 env:
@@ -77,5 +77,7 @@ jobs:
         write-verbose ("{0}" -f ($resourceGroups -join ",")) -verbose
 
         terraform init -backend-config="resource_group_name=${{ env.backendAzureRmResourceGroupName}}" -backend-config="storage_account_name=${{ env.backendAzureRmStorageAccountName }}" -backend-config="container_name=${{ env.backendAzureRmContainerName }}" -backend-config="key=${{ env.stateFile }}"
-        write-error "something wrong" -erroraction stop
+        terraform state pull
+        terraform state list
+        #write-error "something wrong" -erroraction stop
       shell: pwsh
