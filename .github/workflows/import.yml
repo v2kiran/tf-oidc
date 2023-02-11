@@ -116,8 +116,12 @@ jobs:
                     terraform apply -replace="$name" --auto-approve
                 }
             }
+
+            # print resource config from state
+            write-verbose "The resource configuration of ['$name'] in the state file" -verbose
+            terraform state show $name
         }
 
-        terraform state list
+
         #write-error "something wrong" -erroraction stop
       shell: pwsh
