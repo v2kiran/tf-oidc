@@ -35,16 +35,16 @@ jobs:
         varFilePath: .github/variables/state.env::state
 
 
-      - name: Generate the State File Name
-        run: |
-          Write-Host "${{inputs.Resources}}"
-          Write-Host "${{ env.backendAzureRmResourceGroupName}}"
-          Write-Host "${{ env.backendAzureRmStorageAccountName }}"
-          Write-Host "${{ env.backendAzureRmContainerName }}"
+      # - name: Generate the State File Name
+      #   run: |
+      #     Write-Host "${{inputs.Resources}}"
+      #     Write-Host "${{ env.backendAzureRmResourceGroupName}}"
+      #     Write-Host "${{ env.backendAzureRmStorageAccountName }}"
+      #     Write-Host "${{ env.backendAzureRmContainerName }}"
 
-          $resources = "${{inputs.Resources}}"
-          $resourceGroups = $resources.Split("::")
+      #     $resources = "${{inputs.Resources}}"
+      #     $resourceGroups = $resources.Split("::")
 
-          terraform init -backend-config="resource_group_name=${{ env.backendAzureRmResourceGroupName}}" -backend-config="storage_account_name=${{ env.backendAzureRmStorageAccountName }}" -backend-config="container_name=${{ env.backendAzureRmContainerName }}" -backend-config="key=${{ env.stateFile }}"
-          write-error "something wrong" -erroraction stop
-        shell: pwsh
+      #     terraform init -backend-config="resource_group_name=${{ env.backendAzureRmResourceGroupName}}" -backend-config="storage_account_name=${{ env.backendAzureRmStorageAccountName }}" -backend-config="container_name=${{ env.backendAzureRmContainerName }}" -backend-config="key=${{ env.stateFile }}"
+      #     write-error "something wrong" -erroraction stop
+      #   shell: pwsh
