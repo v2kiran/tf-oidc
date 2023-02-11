@@ -31,6 +31,10 @@ on:
 env:
   tf_actions_working_dir: infra
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   plan:
     name: Azure Resources Import Replace Job
@@ -58,7 +62,7 @@ jobs:
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
 
-    - name: Generate the State File Name
+    - name: Import or Replace Resources
       run: |
         Write-Host "${{inputs.Resources}}"
 
