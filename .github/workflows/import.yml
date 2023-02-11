@@ -1,4 +1,4 @@
-﻿name: Tags Deploy
+﻿name: Import Replace TF
 
 on:
   workflow_dispatch:
@@ -15,10 +15,10 @@ on:
           - import
         default: import
 
-  push:
-    branches:
-      - 'main'
-      - 'releases/**'
+  # push:
+  #   branches:
+  #     - 'main'
+  #     - 'releases/**'
 
 
 env:
@@ -26,7 +26,7 @@ env:
 
 jobs:
   plan:
-    name: Azure Job
+    name: Azure Resources Import Replace Job
     runs-on: ubuntu-latest
     environment: tfplan
 
@@ -42,7 +42,7 @@ jobs:
     - name: Load Environment variables
       uses: ./.github/actions/set-env-vars-ps-v2
       with:
-        varFilePath: .github/variables/hash.env;.github/variables/sections.env::one::three;.github/variables/sections2.env::four::one
+        varFilePath: .github/variables/state.env::state
 
 
       - name: Generate the State File Name
