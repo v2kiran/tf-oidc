@@ -7,7 +7,7 @@ on:
         required: true
         type: string
         description: Enter Resource Details
-        default: "azurerm_resource_group.myrg2;/subscriptions/376f5cba-5717-4c24-af4c-bfa9fb5cd79e/resourceGroups/myrg2"
+        default: "azurerm_resource_group.myrg2;/subscriptions/376f5cba-5717-4c24-af4c-bfa9fb5cd79e/resourceGroups/myrg2::azurerm_resource_group.myrg3;/subscriptions/376f5cba-5717-4c24-af4c-bfa9fb5cd79e/resourceGroups/myrg3"
       ActivityType:
         required: true
         type: choice
