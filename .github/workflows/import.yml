@@ -76,8 +76,48 @@ jobs:
         $resourceGroups = $resources.Split("::")
         write-verbose ("{0}" -f ($resourceGroups -join ",")) -verbose
 
+        $Activity = "${{inputs.ActivityType}}"
+        write-verbose "Activity type is set to: ['$Activity']"
+
         terraform init -backend-config="resource_group_name=${{ env.backendAzureRmResourceGroupName}}" -backend-config="storage_account_name=${{ env.backendAzureRmStorageAccountName }}" -backend-config="container_name=${{ env.backendAzureRmContainerName }}" -backend-config="key=${{ env.stateFile }}"
-        terraform state pull
+
+
+        # Import terraform resources
+        $resource_array = $resources -split '::'
+        foreach ($r in $resource_array)
+        {
+            $name, $id = $r -split ';'
+            Write-Verbose ("Working on ['{0}'] with ID:[{1}]" -f $name, $id) -Verbose
+            Write-Verbose "`n" -Verbose
+
+            $resource_output = terraform state show $name
+
+            if($Activity -eq 'import')
+            {
+                if ($null -eq $resource_output)
+                {
+                    Write-Verbose "['$name']: Resource not found in state file....proceed to import`n" -Verbose
+                    terraform import $name $id
+                }
+                else
+                {
+                    Write-Warning "['$name']: Resource already exists in state file so skip import`n"
+                }
+            }
+            elseif($Activity -eq 'replace')
+            {
+                if ($null -eq $resource_output)
+                {
+                    Write-Warning "['$name']: Resource not found in state file....so skip replace`n"
+                }
+                else
+                {
+                    Write-Verbose "['$name']: Found Resource in state file so proceed with replace`n"
+                    terraform apply -replace="$name" --auto-approve
+                }
+            }
+        }
+
         terraform state list
         #write-error "something wrong" -erroraction stop
       shell: pwsh
