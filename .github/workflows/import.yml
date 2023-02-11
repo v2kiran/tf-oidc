@@ -15,11 +15,6 @@ on:
           - import
         default: import
 
-  # push:
-  #   branches:
-  #     - 'main'
-  #     - 'releases/**'
-
 
 env:
   tf_actions_working_dir: infra
@@ -33,11 +28,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    # - name: Log in to Azure using client secret
-    #   uses: azure/login@v1
-    #   with:
-    #       creds: ${{secrets.AZURE_CREDENTIALS}}
-    #       enable-AzPSSession: true
 
     - name: Load Environment variables
       uses: ./.github/actions/set-env-vars-ps-v2
@@ -57,22 +47,4 @@ jobs:
 
           terraform init -backend-config="resource_group_name=${{ env.backendAzureRmResourceGroupName}}" -backend-config="storage_account_name=${{ env.backendAzureRmStorageAccountName }}" -backend-config="container_name=${{ env.backendAzureRmContainerName }}" -backend-config="key=${{ env.stateFile }}"
           write-error "something wrong" -erroraction stop
-          ForEach($groups in $resourceGroups){
-              $split = $groups.Split(";");
-              #check if the resource exists in state file
-
-              $stateResponse = $(terraform state show '$split[0]')
-              Write-Host $stateResponse
-             if($stateResponse -eq $null){
-               if(${{inputs.ActivityType == 'replace'}}){
-                 terraform apply -replace="$split[0]"
-               }
-               elseif(${{inputs.ActivityType == 'import'}}){
-                 terraform import $split[0] $split[1]
-               }
-               else{
-                 terraform state rm $split[0]
-               }
-             }
-          }
         shell: pwsh
