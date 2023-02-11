@@ -20,7 +20,7 @@ on:
         type: boolean
         description: Login to Azure
         required: true
-        default: false
+        default: true
 
   push:
     branches:
@@ -63,7 +63,9 @@ jobs:
         Write-Host "${{inputs.Resources}}"
 
         $resources = "${{inputs.Resources}}"
+        write-verbose $resources -verbose
         $resourceGroups = $resources.Split("::")
+        write-verbose $resourceGroups -verbose
 
         terraform init -backend-config="resource_group_name=${{ env.backendAzureRmResourceGroupName}}" -backend-config="storage_account_name=${{ env.backendAzureRmStorageAccountName }}" -backend-config="container_name=${{ env.backendAzureRmContainerName }}" -backend-config="key=${{ env.stateFile }}"
         write-error "something wrong" -erroraction stop
