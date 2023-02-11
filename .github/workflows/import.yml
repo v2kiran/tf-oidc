@@ -77,7 +77,7 @@ jobs:
         write-verbose ("{0}" -f ($resourceGroups -join ",")) -verbose
 
         $Activity = "${{inputs.ActivityType}}"
-        write-verbose "Activity type is set to: ['$Activity']"
+        write-verbose "Activity type is set to: ['$Activity']" -verbose
 
         terraform init -backend-config="resource_group_name=${{ env.backendAzureRmResourceGroupName}}" -backend-config="storage_account_name=${{ env.backendAzureRmStorageAccountName }}" -backend-config="container_name=${{ env.backendAzureRmContainerName }}" -backend-config="key=${{ env.stateFile }}"
 
