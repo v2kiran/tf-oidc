@@ -5,8 +5,9 @@ on:
     inputs:
       Resources:
         required: true
+        type: string
         description: Enter Resource Details
-        default: azurerm_resource_group.myrg2;/subscriptions/376f5cba-5717-4c24-af4c-bfa9fb5cd79e/resourceGroups/myrg2
+        default: "azurerm_resource_group.myrg2;/subscriptions/376f5cba-5717-4c24-af4c-bfa9fb5cd79e/resourceGroups/myrg2"
       ActivityType:
         required: true
         type: choice
@@ -30,6 +31,9 @@ jobs:
     name: Azure Resources Import Replace Job
     runs-on: ubuntu-latest
     environment: tfplan
+    defaults:
+      run:
+        working-directory: ${{ env.tf_actions_working_dir }}
 
     steps:
     - uses: actions/checkout@v2
@@ -44,9 +48,6 @@ jobs:
     - name: Generate the State File Name
       run: |
         Write-Host "${{inputs.Resources}}"
-        Write-Host "${{ env.backendAzureRmResourceGroupName}}"
-        Write-Host "${{ env.backendAzureRmStorageAccountName }}"
-        Write-Host "${{ env.backendAzureRmContainerName }}"
 
         $resources = "${{inputs.Resources}}"
         $resourceGroups = $resources.Split("::")
