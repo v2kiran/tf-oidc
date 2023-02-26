@@ -1,0 +1,48 @@
+﻿name: Json env
+
+on:
+  workflow_dispatch:
+
+  push:
+    branches:
+      - 'main'
+      - 'releases/**'
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  plan:
+    name: test json env
+    runs-on: ubuntu-latest
+    environment: tfplan
+    defaults:
+      run:
+        working-directory: ps
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Log in to Azure using OIDC
+      if: ${{ inputs.azlogin }}
+      uses: azure/login@v1
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+    - name: Get ADLS Name and ResourceGroupName - Az PS Inline Script
+      uses: azure/powershell@v1
+      id: ADLS_info
+      with:
+        inlineScript: |
+          . Adls_info.ps1 -verbose
+        azPSVersion: "latest"
+
+
+    - name: PowerShell Script - output env vars hash - env vars are case-sensitive
+      run: |
+        write-output $env:ADLSStorageAccount
+        $env:ADLSStorageAccount | convertfrom-json
+      shell: pwsh
