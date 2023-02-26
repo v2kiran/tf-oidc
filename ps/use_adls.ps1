@@ -1,4 +1,4 @@
-﻿$storageaccount = $env:ADLSStorageAccount
+﻿$storageaccount = $env:ADLSStorageAccount | ConvertFrom-Json
 
 foreach ($stg in $storageaccount)
 {
