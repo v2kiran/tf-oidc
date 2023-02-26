@@ -8,7 +8,7 @@ $json = $ADLSStorageAccount | ConvertTo-Json -Compress
 #$hash = $ADLSStorageAccount | ConvertTo-Json
 
 
-Write-Verbose $ADLSStorageAccount -Verbose
+Write-Verbose ($ADLSStorageAccount | Out-String) -Verbose
 Write-Output $json
 
 if ($ADLSStorageAccount)
