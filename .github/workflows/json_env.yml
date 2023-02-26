@@ -35,7 +35,6 @@ jobs:
       id: ADLS_info
       with:
         inlineScript: |
-          dir -recurse
           . ps/Adls_info.ps1 -verbose
         azPSVersion: "latest"
 
@@ -44,4 +43,9 @@ jobs:
       run: |
         write-output $env:ADLSStorageAccount
         $env:ADLSStorageAccount | convertfrom-json
+      shell: pwsh
+
+    - name: PowerShell Script - adls loop
+      run: |
+        . ps/use_adls.ps1
       shell: pwsh

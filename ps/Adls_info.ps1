@@ -5,7 +5,7 @@ $ADLSStorageAccount = Get-AzStorageAccount |
     Where-Object { ($_.storageAccountName -match '1161') } | Select-Object StorageAccountName, ResourceGroupName
 
 $json = $ADLSStorageAccount | ConvertTo-Json -Compress
-#$hash = $ADLSStorageAccount | ConvertTo-Json
+
 
 
 Write-Verbose ($ADLSStorageAccount | Out-String) -Verbose
