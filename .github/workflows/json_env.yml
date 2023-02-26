@@ -35,7 +35,7 @@ jobs:
       id: ADLS_info
       with:
         inlineScript: |
-            dir -recurse
+          dir -recurse
           . ps/Adls_info.ps1 -verbose
         azPSVersion: "latest"
 
