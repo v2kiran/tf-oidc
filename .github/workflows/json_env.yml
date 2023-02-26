@@ -17,9 +17,7 @@ jobs:
     name: test json env
     runs-on: ubuntu-latest
     environment: tfplan
-    defaults:
-      run:
-        working-directory: ps
+
 
     steps:
     - uses: actions/checkout@v2
@@ -37,7 +35,8 @@ jobs:
       id: ADLS_info
       with:
         inlineScript: |
-          . Adls_info.ps1 -verbose
+            dir -recurse
+          . ps/Adls_info.ps1 -verbose
         azPSVersion: "latest"
 
 
