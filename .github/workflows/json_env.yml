@@ -23,7 +23,6 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Log in to Azure using OIDC
-      if: ${{ inputs.azlogin }}
       uses: azure/login@v1
       with:
         client-id: ${{ secrets.AZURE_CLIENT_ID }}
