@@ -7,7 +7,7 @@ on:
         required: false
         default: false
         type: boolean
-        description: Use Shell EKMS Keys
+        description: Use Shell EKMS Keys ( Only for BUS )
 
       RotateKeys:
         required: true
