@@ -1,0 +1,65 @@
+﻿name: Encrypt
+
+on:
+  workflow_dispatch:
+    inputs:
+      EKMS:
+        required: false
+        default: false
+        type: boolean
+        description: Use Shell EKMS Keys
+
+      RotateKeys:
+        required: true
+        default: false
+        type: boolean
+        description: Use Azure Keyvault Self-Generated Keys
+
+  push:
+    branches:
+      - 'main'
+      - 'releases/**'
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  job_1_plan:
+    name: Running Job-1
+    runs-on: ubuntu-latest
+    environment: tfplan
+    steps:
+    # - uses: actions/checkout@v2
+
+    - name: PowerShell Script -
+      run: |
+        write-verbose "this is dummy" -verbose
+      shell: pwsh
+
+
+  job_2_rotate_keys:
+    name: "Create or Rotate Keys"
+    runs-on: ubuntu-latest
+    if: ${{ inputs.RotateKeys }}
+    environment: tfplan
+    steps:
+      # - uses: actions/checkout@v2
+
+      - name: PowerShell Script
+        run: |
+          write-verbose "Create or Rotate Keys" -verbose
+        shell: pwsh
+
+  job_3_encryption_keys:
+    runs-on: ubuntu-latest
+    name: EKMS Encryption Keys
+    if: ${{ inputs.EKMS }}
+    environment: tfplan
+    steps:
+      # - uses: actions/checkout@v2
+
+      - name: PowerShell Script
+        run: |
+          write-verbose "EKMS Keys" -verbose
+        shell: pwsh
