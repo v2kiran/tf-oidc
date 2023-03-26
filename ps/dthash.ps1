@@ -2,11 +2,15 @@
 $hash = $env:DataTopologies
 $hash1 = $env:DataTopologies1
 
-$json_hash = $hash1 | ConvertFrom-Json
+$json_hash = $hash1 | ConvertFrom-Json -AsHashtable
 $json_hash.gettype()
 
-Write-Verbose 'from ps script' -Verbose
-$hash.gettype()
+
+$a = $hash | ConvertTo-Json -Compress
+
+$b = $a | ConvertFrom-Json -AsHashtable
+Write-Verbose 'from ps script - this is b' -Verbose
+$b.gettype()
 
 $json_hash.GetEnumerator() | ForEach-Object {
     $seq = $_.Key
