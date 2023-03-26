@@ -29,7 +29,7 @@ jobs:
 
     - name: PowerShell Script - adls loop
       run: |
-         write-verbose "from inline script" -verbose
-         $env:DataTopologies
+        write-verbose "from inline script" -verbose
+        $env:DataTopologies
         . ps/dthash.ps1
       shell: pwsh
