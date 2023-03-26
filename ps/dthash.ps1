@@ -1,9 +1,14 @@
 ﻿
 $hash = [hashtable]$env:DataTopologies
+$hash1 = [hashtable]$env:DataTopologies1
+
+$json_hash = $hash1 | ConvertFrom-Json
+$json_hash.gettype()
+
 Write-Verbose 'from ps script' -Verbose
 $hash.gettype()
 
-$hash.GetEnumerator() | ForEach-Object {
+$json_hash.GetEnumerator() | ForEach-Object {
     $seq = $_.Key
     $nested_hash = $_.value
 
