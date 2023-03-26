@@ -1,0 +1,33 @@
+﻿name: DataTopologies
+
+on:
+  workflow_dispatch:
+
+  push:
+    branches:
+      - 'main'
+      - 'releases/**'
+
+jobs:
+  plan:
+    name: test dt hash
+    runs-on: ubuntu-latest
+    environment: tfplan
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Load Environment variables
+      uses: ./.github/actions/set-env-vars-ps-v2
+      with:
+        varFilePath: .github/variables/hash.env::dt
+
+    # - name: PowerShell Script - output env vars hash - env vars are case-sensitive
+    #   run: |
+    #     write-output $env:ADLSStorageAccount
+    #     $env:ADLSStorageAccount | convertfrom-json
+    #   shell: pwsh
+
+    - name: PowerShell Script - adls loop
+      run: |
+        . ps/dthash.ps1
+      shell: pwsh
