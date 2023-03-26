@@ -1,6 +1,6 @@
 ﻿
-$hash = [hashtable]$env:DataTopologies
-$hash1 = [hashtable]$env:DataTopologies1
+$hash = $env:DataTopologies
+$hash1 = $env:DataTopologies1
 
 $json_hash = $hash1 | ConvertFrom-Json
 $json_hash.gettype()
