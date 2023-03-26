@@ -1,5 +1,7 @@
 ﻿
-$hash = $env:Datatopologies
+$hash = $env:DataTopologies
+Write-Verbose "from ps script" -Verbose
+$hash
 $hash.GetEnumerator() | ForEach-Object {
     $seq = $_.Key
     $nested_hash = $_.value
