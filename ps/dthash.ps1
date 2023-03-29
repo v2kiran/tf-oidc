@@ -1,18 +1,19 @@
 ﻿
 $hash = $env:DataTopologies
 $hash1 = $env:DataTopologies1
+$hash2 = $env:DataTopologies2
+$hash3 = $env:datatopology
 
-$json_hash = $hash1 | ConvertFrom-Json -AsHashtable
+$hash3
+
+$json_hash = $hash3 | ConvertFrom-Json -AsHashtable
 $json_hash.gettype()
+$json_hash
+$a = ConvertFrom-StringData -StringData $hash2
+Write-Verbose 'from ps script - this is a' -Verbose
+$a.gettype()
 
-
-$a = $hash | ConvertTo-Json -Compress
-
-$b = $a | ConvertFrom-Json -AsHashtable
-Write-Verbose 'from ps script - this is b' -Verbose
-$b.gettype()
-
-$json_hash.GetEnumerator() | ForEach-Object {
+$a.GetEnumerator() | ForEach-Object {
     $seq = $_.Key
     $nested_hash = $_.value
 
