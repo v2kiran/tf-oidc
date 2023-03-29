@@ -75,11 +75,10 @@ runs:
               get-content $var_file | foreach-Object {
                 if( ($_ -notmatch '^\[section:') -and ($_ -notmatch "^#") -and ($_.trim() -ne ""))
                 {
-                    write-verbose "Loading variable: [$_]"
-                    #"$($_.Trim())" | Out-File -FilePath $Env:GITHUB_ENV -Append
+                    write-verbose "Loading variable: [$_]" -verbose
                     $k,$v = $_ -split '=',2 | foreach-Object {$_.Trim() }
                     Set-Item -Path $Env:GITHUB_ENV -Value $k=$v
-                    #"$k=$v" | Out-File -FilePath $Env:GITHUB_ENV -Append
+
                 }
               } #foreach
           }# else
