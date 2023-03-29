@@ -24,4 +24,9 @@ $a.GetEnumerator() | ForEach-Object {
 
 
 
+<#
+$DataTopologies = 'something = @{0006=@{SequenceCode="06";SubscriptionId="123"};0005=@{SequenceCode="05";SubscriptionId="456"}}'
+$k,$v = $DataTopologies -split '=',2 | % {$_.Trim() }
+$k
 
+Set-Item -Path $Env:GITHUB_ENV -Value $k=$v  #>
