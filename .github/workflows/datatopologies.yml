@@ -19,7 +19,7 @@ jobs:
     - name: Load Environment variables
       uses: ./.github/actions/set-env-vars-ps-v2
       with:
-        varFilePath: .github/variables/hash.env::dt
+        varFilePath: .github/variables/hash.env
 
     # - name: PowerShell Script - output env vars hash - env vars are case-sensitive
     #   run: |
