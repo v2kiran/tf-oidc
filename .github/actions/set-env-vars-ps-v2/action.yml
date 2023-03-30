@@ -77,8 +77,8 @@ runs:
                 {
                     $k,$v = $_ -split '=',2 | foreach-Object {$_.Trim() }
                     write-verbose "Loading variable: [$k=$v]" -verbose
-                    #"$k=$v" | Out-File -FilePath $Env:GITHUB_ENV -Append
-                    set-item -path $env:$k -value $v -erroraction stop
+                    "$k=$v" | Out-File -FilePath $Env:GITHUB_ENV -Append
+                    #set-item -path $env:$k -value $v -erroraction stop
 
                 }
               } #foreach
