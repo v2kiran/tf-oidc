@@ -21,12 +21,3 @@ $a.GetEnumerator() | ForEach-Object {
     Write-Verbose "this is the name: $($nested_hash['name'])" -Verbose
 
 }
-
-
-
-<#
-$DataTopologies = 'something = @{0006=@{SequenceCode="06";SubscriptionId="123"};0005=@{SequenceCode="05";SubscriptionId="456"}}'
-$k,$v = $DataTopologies -split '=',2 | % {$_.Trim() }
-$k
-
-Set-Item -Path $Env:GITHUB_ENV -Value $k=$v  #>

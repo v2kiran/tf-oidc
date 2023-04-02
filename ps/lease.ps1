@@ -1,8 +1,8 @@
 ﻿
 
 
-$storage = "stotfstate002"
-$rg = 'tfstate'
+$storage = ""
+$rg = ''
 $sto = Get-AzStorageAccount -ResourceGroupName $rg -Name $storage
 
 $blob = Get-AzStorageBlob -Container tfstate -Blob terraform1.tfstate -Context $sto.Context
