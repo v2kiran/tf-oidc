@@ -26,6 +26,10 @@ jobs:
         $seq = ${{ env.seq }}
         $seq
         $seq.length()
+
+        $seq1 = "${{ env.seq1 }}"
+        $seq1
+        $seq1.length()
       shell: pwsh
 
     # - name: PowerShell Script - adls loop
