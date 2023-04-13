@@ -19,15 +19,17 @@ jobs:
     - name: Load Environment variables
       uses: ./.github/actions/set-env-vars-ps-v2
       with:
-        varFilePath: .github/variables/hash.env
+        varFilePath: .github/variables/hash.env::one
 
-    # - name: PowerShell Script - output env vars hash - env vars are case-sensitive
-    #   run: |
-    #     write-output $env:ADLSStorageAccount
-    #     $env:ADLSStorageAccount | convertfrom-json
-    #   shell: pwsh
-
-    - name: PowerShell Script - adls loop
+    - name: PowerShell Script - output env vars hash - env vars are case-sensitive
       run: |
-        . ps/dthash.ps1
+        $seq = ${{ env.seq }}
+        $seq
+        write-output $env:ADLSStorageAccount
+        $env:ADLSStorageAccount | convertfrom-json
       shell: pwsh
+
+    # - name: PowerShell Script - adls loop
+    #   run: |
+    #     . ps/dthash.ps1
+    #   shell: pwsh
