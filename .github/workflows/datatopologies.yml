@@ -25,11 +25,11 @@ jobs:
       run: |
         $seq = ${{ env.seq }}
         $seq
-        $seq.length()
+        $seq.length
 
         $seq1 = "${{ env.seq1 }}"
         $seq1
-        $seq1.length()
+        $seq1.length
       shell: pwsh
 
     # - name: PowerShell Script - adls loop
