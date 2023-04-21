@@ -14,8 +14,8 @@ runs:
     - run: |
         write-verbose "${{ inputs.secret1 }}" -verbose
         write-verbose "${{ inputs.secret2 }}" -verbose
-        $sum = "${{ inputs.secret2 }}"
-        $sum2 = $sum2 + 1000
+        $sum = ${{ inputs.secret2 }}
+        $sum2 = $sum + 1000
         write-verbose $sum2 -verbose
 
 
