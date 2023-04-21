@@ -1,0 +1,19 @@
+﻿name: "test-secret"
+description: "Configures environment variables for a workflow. Comments and sections can be added"
+inputs:
+  secret1:
+    description: "File path(s) to variable file(s) delimited by a semicolon"
+    required: true
+  secret2:
+    description: "File path(s) to variable file(s) delimited by a semicolon"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - run: |
+        write-verbose "${{ inputs.secret1 }}" -verbose
+        write-verbose "${{ inputs.secret2 }}" -verbose
+
+
+      shell: pwsh
