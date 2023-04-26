@@ -1,14 +1,16 @@
 ﻿
 $cert_path = 'ps/certs/test.pem'
 
-# Write-Output 'cert<<EOF' | Out-File $env:GITHUB_ENV
-# Get-Content $cert_path -Raw | Out-File $env:GITHUB_ENV
-# Write-Output 'EOF' | Out-File $env:GITHUB_ENV
+
+# -join (1..15 | ForEach-Object { [char]((48..57) + (65..90) + (97..122) | Get-Random) }) | Set-Variable EOF
+# "cert<<$EOF" >> $env:GITHUB_ENV
+# Get-Content $cert_path -Raw >> $env:GITHUB_ENV
+# "$EOF" >> $env:GITHUB_ENV
 
 
 -join (1..15 | ForEach-Object { [char]((48..57) + (65..90) + (97..122) | Get-Random) }) | Set-Variable EOF
 "cert<<$EOF" >> $env:GITHUB_ENV
-Get-Content $cert_path -Raw >> $env:GITHUB_ENV
+Write-Output "::add-mask::$(Get-Content $cert_path -Raw)"  >> $env:GITHUB_ENV
 "$EOF" >> $env:GITHUB_ENV
 
 
