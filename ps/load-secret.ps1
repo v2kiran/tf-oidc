@@ -7,7 +7,7 @@ $cert_path = 'ps/certs/test.pem'
 # Get-Content $cert_path -Raw >> $env:GITHUB_ENV
 # "$EOF" >> $env:GITHUB_ENV
 
-Set-Variable -Name TheSecret -Value (Get-Content $cert_path -Raw)
+Set-Variable -Name TheSecret -Value (Get-Content $cert_path)
 Write-Output "::add-mask::$TheSecret"
 -join (1..15 | ForEach-Object { [char]((48..57) + (65..90) + (97..122) | Get-Random) }) | Set-Variable EOF
 "cert<<$EOF" >> $env:GITHUB_ENV
