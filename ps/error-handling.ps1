@@ -7,7 +7,7 @@ param(
 
 try {
     $ValuesJson = "$ConfigsPath/values.json";
-    $tenantid = 'e6f7641c-0828-43ab-a963-69cae0d256a4'
+    $tenantid = ''
 
     $jsonObject = Get-Content -Path $ValuesJson | ConvertFrom-Json
     Write-Output $jsonObject

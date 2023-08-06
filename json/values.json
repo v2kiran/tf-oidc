@@ -15,7 +15,7 @@
         "GroupMembers": {
           "SynapseInstance1": {
             "SynapseMSI": "9985",
-            "SynSubscriptionId": "376f5cba-5717-4c24-af4c-bfa9fb5cd79e",
+            "SynSubscriptionId": "376f5cba",
             "Description": " something A"
           }
         }
@@ -35,7 +35,7 @@
         "GroupMembers": {
           "SynapseInstance1": {
             "SynapseMSI": "9985",
-            "SynSubscriptionId": "376f5cba-5717-4c24-af4c-bfa9fb5cd79e",
+            "SynSubscriptionId": "376f5cba",
             "Description": "something B"
           },
           "ApplicationSPN": {
@@ -59,7 +59,7 @@
         "GroupMembers": {
           "SynapseInstance1": {
             "SynapseMSI": "9985",
-            "SynSubscriptionId": "376f5cba-5717-4c24-af4c-bfa9fb5cd79e",
+            "SynSubscriptionId": "376f5cba",
             "Description": " something c"
           }
         }
