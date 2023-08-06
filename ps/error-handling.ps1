@@ -5,43 +5,53 @@ param(
     [System.Object]$ConfigsPath
 )
 
-$ValuesJson = "$ConfigsPath/values.json";
-$tenantid = 'e6f7641c-0828-43ab-a963-69cae0d256a4'
+try {
+    $ValuesJson = "$ConfigsPath/values.json";
+    $tenantid = 'e6f7641c-0828-43ab-a963-69cae0d256a4'
 
+    $jsonObject = Get-Content -Path $ValuesJson | ConvertFrom-Json
+    Write-Output $jsonObject
+    $spnOwnerGroups = $jsonObject.AADGroups.psobject.Properties | Where-Object { $_.Value.SetSpnOwner -eq $true }
 
-
-$jsonObject = Get-Content -Path $ValuesJson | ConvertFrom-Json
-Write-Output $jsonObject
-$spnOwnerGroups = $jsonObject.AADGroups.psobject.Properties | Where-Object { $_.Value.SetSpnOwner -eq $true }
-
-if ($spnOwnerGroups.Count -gt 0)
-{
-    foreach ($Group in $spnOwnerGroups)
+    if ($spnOwnerGroups.Count -gt 0)
     {
-        $GroupSingle = $Group.Value
-        $GroupID = $GroupSingle.ObjectId
-        $GroupName = $GroupSingle.GroupName
-        Write-Verbose "working on group: [$GroupName]" -Verbose
-
-        # get the synapse instance member groups
-        if ($GroupSingle.GroupMembers.psobject.Properties.name -match 'SynapseInstance')
+        foreach ($Group in $spnOwnerGroups)
         {
-            $syn_instances = $GroupSingle.GroupMembers.psobject.Properties.name
+            $GroupSingle = $Group.Value
+            $GroupID = $GroupSingle.ObjectId
+            $GroupName = $GroupSingle.GroupName
+            Write-Verbose "working on group: [$GroupName]" -Verbose
 
-            foreach ($member in $syn_instances)
+            # get the synapse instance member groups
+            if ($GroupSingle.GroupMembers.psobject.Properties.name -match 'SynapseInstance')
             {
-                $SynSequenceCode = $GroupSingle.GroupMembers.$member.SynapseMSI
-                $SynSubscriptionId = $GroupSingle.GroupMembers.$member.SynSubscriptionId
+                $syn_instances = $GroupSingle.GroupMembers.psobject.Properties.name
 
-                Select-AzSubscription -SubscriptionId $SynSubscriptionId -Tenant $tenantid
-                Write-Verbose "This is the group name: [$GroupName]" -Verbose
-                $files = dir
-                if ($synapse_object)
+                foreach ($member in $syn_instances)
                 {
-                    $files[0].FullName
-                }#if synapse_object
-            }# foreach synapse instance
-        }#Synapse member groups
+                    $SynSequenceCode = $GroupSingle.GroupMembers.$member.SynapseMSI
+                    $SynSubscriptionId = $GroupSingle.GroupMembers.$member.SynSubscriptionId
 
-    }# group is present
+                    Select-AzSubscription -SubscriptionId $SynSubscriptionId -Tenant $tenantid
+                    Write-Verbose "This is the group name: [$GroupName]" -Verbose
+                    $files = dir
+                    if ($synapse_object)
+                    {
+                        $files[0].FullName
+                    }#if synapse_object
+                }# foreach synapse instance
+            }#Synapse member groups
+
+        }# group is present
+    }
+}
+catch {
+    $err = Get-Error -Newest 1
+    [PSCustomObject]@{
+        Command = $err.InvocationInfo.Line.Trim()
+        LineNumber = $err.InvocationInfo.ScriptLineNumber
+        ErrorMessage = $err.Exception.Message
+        TargetObject = $err.TargetObject
+    } | Format-List
+    Write-Error "failed with the above details" -ErrorAction Stop
 }
