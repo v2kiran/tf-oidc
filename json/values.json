@@ -1,0 +1,68 @@
+﻿{
+    "AADGroups": {
+      "A": {
+        "GroupName": "my-grp-one-1",
+        "ObjectId": "f222f1d1",
+        "GroupDescription": "group a",
+        "PermissionType": "RBAC",
+        "PermissionName": "A",
+        "Permission": "A",
+        "ResourceType": "SQL Database",
+        "FreeText": "001",
+        "DataTopologyShortCode": "tst",
+        "Role": "A",
+        "SetSpnOwner": true,
+        "GroupMembers": {
+          "SynapseInstance1": {
+            "SynapseMSI": "9985",
+            "SynSubscriptionId": "376f5cba-5717-4c24-af4c-bfa9fb5cd79e",
+            "Description": " something A"
+          }
+        }
+      },
+      "B": {
+        "GroupName": "my-grp-one-2",
+        "ObjectId": "b84f7668",
+        "GroupDescription": "",
+        "PermissionName": "b",
+        "Permission": "b",
+        "PermissionType": "RBAC",
+        "ResourceType": "Data Lake Gen2",
+        "FreeText": "02",
+        "DataTopologyShortCode": "tst",
+        "SetSpnOwner": true,
+        "enable_adls": true,
+        "GroupMembers": {
+          "SynapseInstance1": {
+            "SynapseMSI": "9985",
+            "SynSubscriptionId": "376f5cba-5717-4c24-af4c-bfa9fb5cd79e",
+            "Description": "something B"
+          },
+          "ApplicationSPN": {
+            "Name": "my-app-son",
+            "ObjectId": "7086dca0",
+            "Description": "something b"
+          }
+        }
+      },
+      "C": {
+        "GroupName": "my-grp-one-3",
+        "ObjectId": "8e5f75c1",
+        "GroupDescription": "c",
+        "PermissionType": "RBAC",
+        "PermissionName": "c",
+        "Permission": "c",
+        "ResourceType": "Data Lake Gen2",
+        "FreeText": "01",
+        "DataTopologyShortCode": "PLT",
+        "SetSpnOwner": true,
+        "GroupMembers": {
+          "SynapseInstance1": {
+            "SynapseMSI": "9985",
+            "SynSubscriptionId": "376f5cba-5717-4c24-af4c-bfa9fb5cd79e",
+            "Description": " something c"
+          }
+        }
+      }
+    }
+  }
