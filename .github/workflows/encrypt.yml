@@ -78,5 +78,7 @@ jobs:
           Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
           install-module psframework
           cd ps
+          test-path  config-test.json
+          dir | select FullName
           Get-PSFConfigValue -FullName MyProject.Build.Artifactory | Write-Verbose -Verbose
         shell: pwsh
