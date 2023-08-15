@@ -12,8 +12,8 @@ $configToExport | Export-PSFConfig -OutPath .\config-test.json
 
 Import-PSFConfig -Path ps/config-test.json | Register-PSFConfig
 
-Get-PSFConfigValue -FullName MyProject.Build.Artifactory
+Get-PSFConfigValue -FullName MyProject.Build.Artifactory | Write-Verbose -Verbose
 
 Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
 
-Register-PSFConfig -Module MyProject -Scope FileUserLocal
+Register-PSFConfig -Module MyProject -Scope FileUserShared
