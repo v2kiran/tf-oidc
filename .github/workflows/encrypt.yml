@@ -52,14 +52,16 @@ jobs:
           install-module psframework
           import-psfconfig -path ps/config-test.json | Register-PSFConfig
           get-psfconfig
-          Get-PSFConfigValue -FullName MyProject.Build.Repository
+          Get-PSFConfigValue -FullName MyProject.Build.Repository | Write-Verbose -Verbose
         shell: pwsh
 
       - name: PowerShell Script - test imported value
         run: |
           get-psfconfig
-          Get-PSFConfigValue -FullName MyProject.Build.Artifactory | Write-Verbose -Verbose
-          Get-PSFConfigValue -FullName MyProject.Build.Repository | Write-Verbose -Verbose
+          Get-PSFConfigValue -FullName MyProject.Build.Artifactory
+          #| Write-Verbose -Verbose
+          Get-PSFConfigValue -FullName MyProject.Build.Repository
+          #| Write-Verbose -Verbose
         shell: pwsh
 
   job_3_encryption_keys:
@@ -76,5 +78,5 @@ jobs:
           Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
           install-module psframework
           cd ps
-          Get-PSFConfigValue -FullName MyProject.Build.Artifactory
+          Get-PSFConfigValue -FullName MyProject.Build.Artifactory | Write-Verbose -Verbose
         shell: pwsh
