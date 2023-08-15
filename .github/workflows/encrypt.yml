@@ -50,10 +50,7 @@ jobs:
         run: |
           Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
           install-module psframework
-          write-verbose "Create or Rotate Keys" -verbose
-          test-path ps/config-test.json
-          dir | fl *
-          import-psfconfig -path ps/config-test.json
+          import-psfconfig -path ps/config-test.json | Register-PSFConfig
           Get-PSFConfigValue -FullName MyProject.Build.Repository
         shell: pwsh
 
@@ -73,5 +70,7 @@ jobs:
 
       - name: PowerShell Script
         run: |
+          Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+          install-module psframework
           Get-PSFConfigValue -FullName MyProject.Build.Artifactory
         shell: pwsh
