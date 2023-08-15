@@ -13,3 +13,5 @@ $configToExport | Export-PSFConfig -OutPath .\config-test.json
 Import-PSFConfig -Path -
 
 Get-PSFConfigValue -FullName MyProject.Build.Artifactory
+
+Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
