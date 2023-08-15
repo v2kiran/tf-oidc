@@ -16,4 +16,4 @@ Get-PSFConfigValue -FullName MyProject.Build.Artifactory | Write-Verbose -Verbos
 
 Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
 
-Register-PSFConfig -Module MyProject -Scope FileUserShared
+Register-PSFConfig -Module MyProject -Scope SystemDefault
