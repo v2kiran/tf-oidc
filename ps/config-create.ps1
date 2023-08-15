@@ -10,7 +10,7 @@ $configToExport += Set-PSFConfig -FullName "SomeModule2.SomeSetting2" -Value $tr
 # Write the configuration file
 $configToExport | Export-PSFConfig -OutPath .\config-test.json
 
-Import-PSFConfig -Path -
+Import-PSFConfig -Path ps/config-test.json
 
 Get-PSFConfigValue -FullName MyProject.Build.Artifactory
 

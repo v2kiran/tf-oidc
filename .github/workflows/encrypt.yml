@@ -51,6 +51,8 @@ jobs:
           Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
           install-module psframework
           write-verbose "Create or Rotate Keys" -verbose
+          test-path ps/config-test.json
+          dir
           import-psfconfig -path ps/config-test.json
           Get-PSFConfigValue -FullName MyProject.Build.Repository
         shell: pwsh
@@ -60,15 +62,16 @@ jobs:
           Get-PSFConfigValue -FullName MyProject.Build.Artifactory
         shell: pwsh
 
-  job_3_encryption_keys:
-    runs-on: ubuntu-latest
-    name: EKMS Encryption Keys
-    #if: ${{ inputs.EKMS }}
-    environment: tfplan
-    steps:
-      - uses: actions/checkout@v2
+  # job_3_encryption_keys:
+  #   runs-on: ubuntu-latest
+  #   name: EKMS Encryption Keys
+  #   #if: ${{ inputs.EKMS }}
+  #   needs: [job_2_rotate_keys]
+  #   environment: tfplan
+  #   steps:
+  #     - uses: actions/checkout@v2
 
-      - name: PowerShell Script
-        run: |
-          Get-PSFConfigValue -FullName MyProject.Build.Artifactory
-        shell: pwsh
+  #     - name: PowerShell Script
+  #       run: |
+  #         Get-PSFConfigValue -FullName MyProject.Build.Artifactory
+  #       shell: pwsh
