@@ -44,7 +44,7 @@ jobs:
     #if: ${{ inputs.RotateKeys }}
     environment: tfplan
     steps:
-      # - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
       - name: PowerShell Script - Import psfconfig
         run: |
@@ -52,7 +52,7 @@ jobs:
           install-module psframework
           write-verbose "Create or Rotate Keys" -verbose
           test-path ps/config-test.json
-          dir
+          dir | fl *
           import-psfconfig -path ps/config-test.json
           Get-PSFConfigValue -FullName MyProject.Build.Repository
         shell: pwsh
