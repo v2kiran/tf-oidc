@@ -48,6 +48,7 @@ jobs:
 
       - name: PowerShell Script - Import psfconfig
         run: |
+          install-module psframework
           write-verbose "Create or Rotate Keys" -verbose
           import-psfconfig ps/config-test.json
           Get-PSFConfigValue -FullName MyProject.Build.Repository
