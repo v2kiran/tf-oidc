@@ -51,7 +51,7 @@ jobs:
           Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
           install-module psframework
           write-verbose "Create or Rotate Keys" -verbose
-          import-psfconfig ps/config-test.json
+          import-psfconfig -path ps/config-test.json
           Get-PSFConfigValue -FullName MyProject.Build.Repository
         shell: pwsh
 
