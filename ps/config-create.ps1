@@ -18,9 +18,9 @@ $configToExport += Set-PSFConfig -FullName "SomeModule.SomeSetting" -Value "1"  
 $configToExport += Set-PSFConfig -FullName "SomeModule.SomeSetting2" -Value 2  -PassThru
 $configToExport += Set-PSFConfig -FullName "SomeModule2.SomeSetting" -Value "3"  -PassThru
 $configToExport += Set-PSFConfig -FullName "SomeModule2.SomeSetting2" -Value $true  -PassThru
-$configToExport | Export-PSFConfig 
+$configToExport | Export-PSFConfig
 
-Import-PSFConfig -Path ps/config-test.json | Register-PSFConfig
+Import-PSFConfig -Path ps/config-test.json -PassThru | Register-PSFConfig
 
 Get-PSFConfigValue -FullName MyProject.Build.Artifactory | Write-Verbose -Verbose
 
@@ -31,3 +31,5 @@ Register-PSFConfig -Module MyProject -Scope UserMandatory
 <#
 /etc/xdg/PowerShell
 #>
+
+Get-PSFConfigValue

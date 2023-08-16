@@ -50,7 +50,7 @@ jobs:
         run: |
           Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
           install-module psframework
-          import-psfconfig -path ps/config-test.json | Register-PSFConfig
+          import-psfconfig -path ps/config-test.json -PassThru | Register-PSFConfig
           get-psfconfig
           Get-PSFConfigValue -FullName MyProject.Build.Repository | Write-Verbose -Verbose
         shell: pwsh
