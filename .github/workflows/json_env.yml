@@ -5,7 +5,7 @@ on:
 
   push:
     branches:
-      # - 'main'
+      - 'main'
       - 'releases/**'
 
 permissions:
@@ -30,9 +30,43 @@ jobs:
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         enable-AzPSSession: true
 
+    # - name: Login using oidc
+    #   shell: pwsh
+    #   run: |
+    #       #$DebugPreference='Continue'
+    #       #$psversiontable | out-string
+    #       install-module az.accounts
+    #       $Audience = "api://AzureADTokenExchange"
+    #       $GitToken = $env:ACTIONS_ID_TOKEN_REQUEST_TOKEN
+    #       $GitTokenUrl = $env:ACTIONS_ID_TOKEN_REQUEST_URL
+    #       $apiUrl = "{0}&audience={1}" -f $GitTokenUrl, $Audience
+
+    #       $jwt_tokens = Invoke-RestMethod $apiUrl -Headers @{Authorization = ("bearer {0}" -f $GitToken)}
+    #       $federatedToken = ($jwt_tokens.Value -split "\.")[1]
+    #       if(($federatedToken.Length % 4) -ne 0) {
+    #         $federatedToken = $federatedToken.PadRight($federatedToken.Length + 4 - ($federatedToken.Length % 4), "=")
+    #       }
+
+    #       Disable-AzContextAutosave -Scope Process
+
+    #       try
+    #       {
+    #         Connect-azaccount -TenantId ${{ secrets.AZURE_TENANT_ID }} -ApplicationId ${{ secrets.AZURE_CLIENT_ID }} -federatedtoken $federatedToken -ServicePrincipal -erroraction stop
+    #       }
+    #       catch{
+    #         get-error -newest 1
+    #         resolve-azerror
+    #         write-verbose "psversiontable"
+    #         $psversiontable | out-string
+
+    #         write-verbose "az modules"
+    #         get-module az*
+    #       }
+
     - name: Login using oidc
-      shell: pwsh
-      run: |
+      uses: azure/powershell@v1
+      with:
+        inlineScript: |
           #$DebugPreference='Continue'
           #$psversiontable | out-string
           install-module az.accounts
@@ -62,6 +96,7 @@ jobs:
             write-verbose "az modules"
             get-module az*
           }
+        azPSVersion: "latest"
 
 
     - name: Get secrets - Job__az_oidc_tst__Step-3
