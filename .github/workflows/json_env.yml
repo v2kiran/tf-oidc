@@ -35,6 +35,7 @@ jobs:
       run: |
           #$DebugPreference='Continue'
           #$psversiontable | out-string
+          install-module az.accounts
           $Audience = "api://AzureADTokenExchange"
           $GitToken = $env:ACTIONS_ID_TOKEN_REQUEST_TOKEN
           $GitTokenUrl = $env:ACTIONS_ID_TOKEN_REQUEST_URL
