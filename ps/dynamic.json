@@ -1,0 +1,10 @@
+﻿{
+    "Version": 1,
+    "ModuleName": "Bartender",
+    "Dynamic": {
+        "Fridge.Size": 200,
+        "Fridge.Content": 180,
+        "Fridge.Manufacturer": "%Manufacturer%",
+        "%Location%.Barrels": 42
+    }
+}

@@ -30,22 +30,62 @@ jobs:
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         enable-AzPSSession: true
 
-    - name: Get ADLS Name and ResourceGroupName - Az PS Inline Script
+    - name: Login using oidc
+      shell: pwsh
+      run: |
+          #$DebugPreference='Continue'
+          #$psversiontable | out-string
+          $Audience = "api://AzureADTokenExchange"
+          $GitToken = $env:ACTIONS_ID_TOKEN_REQUEST_TOKEN
+          $GitTokenUrl = $env:ACTIONS_ID_TOKEN_REQUEST_URL
+          $apiUrl = "{0}&audience={1}" -f $GitTokenUrl, $Audience
+
+          $jwt_tokens = Invoke-RestMethod $apiUrl -Headers @{Authorization = ("bearer {0}" -f $GitToken)}
+          $federatedToken = ($jwt_tokens.Value -split "\.")[1]
+          if(($federatedToken.Length % 4) -ne 0) {
+            $federatedToken = $federatedToken.PadRight($federatedToken.Length + 4 - ($federatedToken.Length % 4), "=")
+          }
+
+          Disable-AzContextAutosave -Scope Process
+
+          try
+          {
+            Connect-azaccount -TenantId ${{ secrets.AZURE_TENANT_ID }} -ApplicationId ${{ secrets.AZURE_CLIENT_ID }} -federatedtoken $federatedToken -ServicePrincipal -erroraction stop
+          }
+          catch{
+            get-error -newest 1
+            resolve-azerror
+            write-verbose "psversiontable"
+            $psversiontable | out-string
+
+            write-verbose "az modules"
+            get-module az*
+          }
+
+
+    - name: Get secrets - Job__az_oidc_tst__Step-3
       uses: azure/powershell@v1
-      id: ADLS_info
       with:
         inlineScript: |
-          . ps/Adls_info.ps1 -verbose
+          get-azresourcegroup | select -first 1 | out-string
         azPSVersion: "latest"
 
+    # - name: Get ADLS Name and ResourceGroupName - Az PS Inline Script
+    #   uses: azure/powershell@v1
+    #   id: ADLS_info
+    #   with:
+    #     inlineScript: |
+    #       . ps/Adls_info.ps1 -verbose
+    #     azPSVersion: "latest"
 
-    - name: PowerShell Script - output env vars hash - env vars are case-sensitive
-      run: |
-        write-output $env:ADLSStorageAccount
-        $env:ADLSStorageAccount | convertfrom-json
-      shell: pwsh
 
-    - name: PowerShell Script - adls loop
-      run: |
-        . ps/use_adls.ps1
-      shell: pwsh
+    # - name: PowerShell Script - output env vars hash - env vars are case-sensitive
+    #   run: |
+    #     write-output $env:ADLSStorageAccount
+    #     $env:ADLSStorageAccount | convertfrom-json
+    #   shell: pwsh
+
+    # - name: PowerShell Script - adls loop
+    #   run: |
+    #     . ps/use_adls.ps1
+    #   shell: pwsh
