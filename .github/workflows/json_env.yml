@@ -36,7 +36,9 @@ jobs:
           #$DebugPreference='Continue'
           #$psversiontable | out-string
           Set-PSRepository -name psgallery -InstallationPolicy Trusted
-          install-module az.accounts -requiredversion 2.12.0
+          install-module az.accounts -requiredversion 2.9.1
+          import-module az.accounts
+          get-module az.accounts | out-string
           $Audience = "api://AzureADTokenExchange"
           $GitToken = $env:ACTIONS_ID_TOKEN_REQUEST_TOKEN
           $GitTokenUrl = $env:ACTIONS_ID_TOKEN_REQUEST_URL
