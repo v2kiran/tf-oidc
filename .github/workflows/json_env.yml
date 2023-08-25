@@ -37,7 +37,7 @@ jobs:
           bearerToken=${ACTIONS_ID_TOKEN_REQUEST_TOKEN}
           runtimeUrl=${ACTIONS_ID_TOKEN_REQUEST_URL}
           runtimeUrl="${runtimeUrl}&audience=api://AzureADTokenExchange"
-          echo ::set-output name=JWTTOKEN::$(curl -H "Authorization: bearer $bearerToken" $runtimeUrl | jq -r ".value")
+          echo "JWTTOKEN=$(curl -H "Authorization: bearer $bearerToken" $runtimeUrl | jq -r ".value")" >> $GITHUB_ENV
 
 
     - name: Login using oidc
@@ -59,7 +59,7 @@ jobs:
           # }
 
           Disable-AzContextAutosave -Scope Process
-          $federatedToken = ${{ steps.tokenForAAD.JWTTOKEN }}
+          $federatedToken = ${{ env.JWTTOKEN }}
           if($federatedToken)
           {
             write-verbose "token present" -verbose
