@@ -31,27 +31,43 @@ jobs:
     #     enable-AzPSSession: true
 
     - name: Login using oidc
+      #shell: pwsh
+      id: tokenForAAD
+      run: |
+          bearerToken=${ACTIONS_ID_TOKEN_REQUEST_TOKEN}
+          runtimeUrl=${ACTIONS_ID_TOKEN_REQUEST_URL}
+          runtimeUrl="${runtimeUrl}&audience=api://AzureADTokenExchange"
+          echo ::set-output name=JWTTOKEN::$(curl -H "Authorization: bearer $bearerToken" $runtimeUrl | jq -r ".value")
+
+
+    - name: Login using oidc
       shell: pwsh
       run: |
-          #$DebugPreference='Continue'
-          #$psversiontable | out-string
           Set-PSRepository -name psgallery -InstallationPolicy Trusted
           install-module az.accounts -requiredversion 2.9.1
           import-module az.accounts
-          get-module az.accounts | out-string
-          $Audience = "api://AzureADTokenExchange"
-          $GitToken = $env:ACTIONS_ID_TOKEN_REQUEST_TOKEN
-          $GitTokenUrl = $env:ACTIONS_ID_TOKEN_REQUEST_URL
-          $apiUrl = "{0}&audience={1}" -f $GitTokenUrl, $Audience
+          # get-module az.accounts | out-string
+          # $Audience = "api://AzureADTokenExchange"
+          # $GitToken = $env:ACTIONS_ID_TOKEN_REQUEST_TOKEN
+          # $GitTokenUrl = $env:ACTIONS_ID_TOKEN_REQUEST_URL
+          # $apiUrl = "{0}&audience={1}" -f $GitTokenUrl, $Audience
 
-          $jwt_tokens = Invoke-RestMethod $apiUrl -Headers @{Authorization = ("bearer {0}" -f $GitToken)}
-          $federatedToken = ($jwt_tokens.Value -split "\.")[1]
-          if(($federatedToken.Length % 4) -ne 0) {
-            $federatedToken = $federatedToken.PadRight($federatedToken.Length + 4 - ($federatedToken.Length % 4), "=")
-          }
+          # $jwt_tokens = Invoke-RestMethod $apiUrl -Headers @{Authorization = ("bearer {0}" -f $GitToken)}
+          # $federatedToken = ($jwt_tokens.Value -split "\.")[1]
+          # if(($federatedToken.Length % 4) -ne 0) {
+          #   $federatedToken = $federatedToken.PadRight($federatedToken.Length + 4 - ($federatedToken.Length % 4), "=")
+          # }
 
           Disable-AzContextAutosave -Scope Process
-
+          $federatedToken = ${{ steps.tokenForAAD.JWTTOKEN }}
+          if($federatedToken)
+          {
+            write-verbose "token present" -verbose
+          }
+          else
+          {
+            write-warning "token not obtained"
+          }
           try
           {
             Connect-azaccount -TenantId ${{ secrets.AZURE_TENANT_ID }} -ApplicationId ${{ secrets.AZURE_CLIENT_ID }} -federatedtoken $federatedToken -ServicePrincipal -erroraction stop

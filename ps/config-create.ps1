@@ -38,3 +38,12 @@ Get-PSFConfigValue
 # store full objects
 Get-Item C:\temp\AdminTools | ConvertTo-PSFClixml
 gsv wa* | ConvertTo-PSFClixml
+
+
+
+- run: |
+bearerToken=${ACTIONS_ID_TOKEN_REQUEST_TOKEN}
+runtimeUrl=${ACTIONS_ID_TOKEN_REQUEST_URL}
+runtimeUrl="${runtimeUrl}&audience=api://AzureADTokenExchange"
+echo ::set-output name=JWTTOKEN::$(curl -H "Authorization: bearer $bearerToken" $runtimeUrl | jq -r ".value")
+id: tokenForAAD
