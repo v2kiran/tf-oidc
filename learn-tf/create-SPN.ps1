@@ -19,10 +19,8 @@ $env:ARM_TENANT_ID = "e6f7641c-0828-43ab-a963-69cae0d256a4"
 $env:ARM_SUBSCRIPTION_ID = "376f5cba-5717-4c24-af4c-bfa9fb5cd79e"
 
 
-
 ## terraform steps
 terraform init
 
 
 terraform plan
-
