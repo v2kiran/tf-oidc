@@ -1,4 +1,4 @@
-﻿variable "rg_name" {
+variable "rg_name" {
   type        = string
   description = "the resource group name"
 }
@@ -27,4 +27,9 @@ variable "rg2_name" {
 variable "rg2_location" {
   type        = string
   description = "the location of the resource group"
+}
+
+variable "rg_map" {
+  type        = map(any)
+  description = "map of rg"
 }

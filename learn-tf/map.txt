@@ -1,0 +1,6 @@
+﻿
+
+key      |       value
+rg1      |       {name = "siva-tf";location = "centralindia"}
+rg2      |       {name = "siva-tf-1";location = "centralindia"}
+rg3      |       {name = "siva-tf-2";location = "centralindia"}
